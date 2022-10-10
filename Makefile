@@ -6,7 +6,7 @@
 #    By: caboudar <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/05 07:40:34 by caboudar          #+#    #+#              #
-#    Updated: 2022/10/05 07:44:36 by caboudar         ###   ########.fr        #
+#    Updated: 2022/10/11 00:21:04 by caboudar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ NAME		= pipex
 # ################################## #
 C_DIR		= srcs
 C_FILES		=	pipex.c \
+				ft_split.c \
 
 SRCS		= $(patsubst %, $(C_DIR)/%, $(C_FILES))
 
