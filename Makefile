@@ -6,7 +6,7 @@
 #    By: caboudar <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/05 07:40:34 by caboudar          #+#    #+#              #
-#    Updated: 2022/10/11 00:21:04 by caboudar         ###   ########.fr        #
+#    Updated: 2022/10/11 01:41:44 by caboudar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ NAME		= pipex
 C_DIR		= srcs
 C_FILES		=	pipex.c \
 				ft_split.c \
+				path_parsing_itils.c \
 
 SRCS		= $(patsubst %, $(C_DIR)/%, $(C_FILES))
 
