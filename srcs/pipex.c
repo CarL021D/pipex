@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 08:03:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/11 01:38:39 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/12 21:04:59 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,46 +45,82 @@ char	*join_slash_and_comd_to_path(char *s1, char *s2)
 	return (str);
 }
 
-void    get_command_path(char **envp, char **av)
-{
-    char    **segmented_path;
-    char    *correct_path;
-    char    *path_env;
-    int     i;
-
-    i = 0;
-    while (envp[i])
-    {
-        path_env = ft_strnstr(envp[i], "PATH=", 5);
-        if (path_env)
-            break;
-        i++;
-    }
-    if (!envp[i])
-        exit(EXIT_FAILURE);
-    segmented_path = ft_split(path_env, ':');
-    free(path_env);
-    i = 0;
-    while (segmented_path[i])
-    {
-        correct_path = join_slash_and_comd_to_path(segmented_path[i], av[1]);
-        if (access(correct_path, F_OK | X_OK) == 0)
-        {
-            printf("SUCCESS\n");
-            printf("%s\n", correct_path);
-        }
-        else
-            printf("FAILURE\n\n");
-        i++;
-    }
-}
-
-int main(int ac, char **av, char **envp)
+void    check_args(int ac)
 {
     if (ac < 2)
     {
         write(1, "Not enough arguments\n", 21);
-        return (1);
+        exit(EXIT_FAILURE);
     }
-    get_command_path(envp, av);
+}
+
+char    *get_command_path(char **envp, char **av)
+{
+    char    **segmented_path;
+    char    *command_path;
+    char    *path_env;
+    int     i;
+
+    i = -1;
+    while (envp[++i])
+    {
+        path_env = ft_strnstr(envp[i], "PATH=", 5);
+        if (path_env)
+            break ;
+    }
+    segmented_path = ft_split(path_env, ':');
+    free(path_env);
+    if (!envp[i])
+        exit(EXIT_FAILURE);
+    i = -1;
+    while (segmented_path[++i])
+    {
+        command_path = join_slash_and_comd_to_path(segmented_path[i], av[1]);
+        if (access(command_path, F_OK | X_OK) == 0)
+            return (command_path);
+    }
+    free(command_path);
+    exit(EXIT_FAILURE);
+}
+
+char    **get_excve_args(char **av)
+{
+    char    **cmd_line_parsed;
+    
+    cmd_line_parsed = ft_split(av[1], ' ');
+    return (cmd_line_parsed);
+}
+
+
+
+int main(int ac, char **av, char **envp)
+{
+    char    *command_path;
+
+    char *execve_args[3] = {"ls", "-la", NULL};
+    // char *execve_args[3];
+	
+    // char **options;
+    // int     i;
+    
+    // t_data  data;
+
+    check_args(ac);
+    command_path = get_command_path(envp, av);
+
+    // options = ft_split(av[1], ' ');
+    // *execve_args = {options[0], options[1], NULL};
+    // execve_args[0] = options[0];
+    // execve_args[1] = options[1];
+    // execve_args[2] = n;
+    
+    // for (int i = 0; execve_args[i]; i++)
+        // printf("%s\n", execve_args[i]);
+
+    // execve_args = get_excve_args(av);
+    // (void)execve_args;
+    // for (int i = 0; execve_args[i]; i++)
+        // printf("%s\n", execve_args[i]);
+    // printf("%s\n", command_path);
+    execve(command_path, execve_args, envp);
 }

@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:01:46 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/11 00:08:21 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/12 18:14:15 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void    free_tab(char **arr, int i)
 
 int	ft_word_len(char *str, char charset)
 {
-	int		len;
+	int		i;
 
-	len = 0;
-	while (str[len] && str[len] != charset)
-		len++;
-	return (len);
+	i = 0;
+	while (str[i] && str[i] != charset)
+		i++;
+	return (i);
 }
 
 int	ft_word_count(char *str, char charset)
