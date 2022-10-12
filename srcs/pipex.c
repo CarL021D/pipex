@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 08:03:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/12 21:04:59 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/12 23:26:53 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,73 +54,73 @@ void    check_args(int ac)
     }
 }
 
+char    *get_segmented_path(char **envp)
+{
+    char    *path_env;
+    int     i;
+
+    i = 0;
+    while (envp[i])
+    {
+        path_env = ft_strnstr(envp[i], "PATH=", 5);
+        if (path_env)
+            return (path_env);
+        i++;
+    }
+    exit(EXIT_FAILURE);
+}
+
 char    *get_command_path(char **envp, char **av)
 {
     char    **segmented_path;
     char    *command_path;
     char    *path_env;
+    char    **cmd;
     int     i;
 
-    i = -1;
-    while (envp[++i])
-    {
-        path_env = ft_strnstr(envp[i], "PATH=", 5);
-        if (path_env)
-            break ;
-    }
+    path_env = get_segmented_path(envp);
     segmented_path = ft_split(path_env, ':');
     free(path_env);
-    if (!envp[i])
-        exit(EXIT_FAILURE);
-    i = -1;
-    while (segmented_path[++i])
+    cmd = ft_split(av[1], ' ');
+    i = 0;
+    while (segmented_path[i])
     {
-        command_path = join_slash_and_comd_to_path(segmented_path[i], av[1]);
+        command_path = join_slash_and_comd_to_path(segmented_path[i], cmd[0]);
         if (access(command_path, F_OK | X_OK) == 0)
+        {
+            free(segmented_path);
             return (command_path);
+        }
+        i++;
     }
+
+    // SECURE EVTHG ???
+    
+    free(segmented_path);
     free(command_path);
     exit(EXIT_FAILURE);
-}
-
-char    **get_excve_args(char **av)
-{
-    char    **cmd_line_parsed;
-    
-    cmd_line_parsed = ft_split(av[1], ' ');
-    return (cmd_line_parsed);
 }
 
 
 
 int main(int ac, char **av, char **envp)
 {
-    char    *command_path;
-
-    char *execve_args[3] = {"ls", "-la", NULL};
-    // char *execve_args[3];
-	
-    // char **options;
-    // int     i;
-    
-    // t_data  data;
+    pid_t   pid;
+    char    *command_path;	
+    char    **cmd_options;
 
     check_args(ac);
+    pid = fork();
     command_path = get_command_path(envp, av);
+    cmd_options = ft_split(av[1], ' ');
+    (void)command_path;
+    (void)cmd_options;
+    if (pid == 0)
+    {
+        printf("Son >>> %d\n", pid);
+        execve(command_path, cmd_options, envp);
+    }
+    else if (pid > 0)
+        printf("Dad >>> %d\n", pid);
 
-    // options = ft_split(av[1], ' ');
-    // *execve_args = {options[0], options[1], NULL};
-    // execve_args[0] = options[0];
-    // execve_args[1] = options[1];
-    // execve_args[2] = n;
-    
-    // for (int i = 0; execve_args[i]; i++)
-        // printf("%s\n", execve_args[i]);
-
-    // execve_args = get_excve_args(av);
-    // (void)execve_args;
-    // for (int i = 0; execve_args[i]; i++)
-        // printf("%s\n", execve_args[i]);
-    // printf("%s\n", command_path);
-    execve(command_path, execve_args, envp);
 }

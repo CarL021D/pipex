@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/12 19:50:08 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/12 22:57:13 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	**ft_split(char *str, char c);
 
 
 //                  PATH PARSING
+char    *get_segmented_path(char **envp);
 char    *path_str(char *full_path);
 char	*ft_strnstr(char *full_path, const char *s2, size_t n);
 char	*join_slash_and_comd_to_path(char *s1, char *s2);
