@@ -113,14 +113,11 @@ int main(int ac, char **av, char **envp)
     pid = fork();
     command_path = get_command_path(envp, av);
     cmd_options = ft_split(av[1], ' ');
-    (void)command_path;
-    (void)cmd_options;
     if (pid == 0)
-    {
-        printf("Son >>> %d\n", pid);
-        execve(command_path, cmd_options, envp);
-    }
-    else if (pid > 0)
-        printf("Dad >>> %d\n", pid);
-
+	{
+		printf("Son >>> %d\n", pid);
+		execve(command_path, cmd_options, envp);
+	}
+	waitpid(pid, NULL, 0);
+	printf("Dad >>> %d\n", pid);
 }
