@@ -13,7 +13,7 @@
 #include "../include/pipex.h"
 
 #include <unistd.h>
-// #include <fcntl.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -105,19 +105,49 @@ char    *get_command_path(char **envp, char **av)
 
 int main(int ac, char **av, char **envp)
 {
-    pid_t   pid;
-    char    *command_path;	
     char    **cmd_options;
+    char    *command_path;	
+    pid_t   pid;
+	int		pipe_fd[2];
+	int		fd_1;
+	int		fd_2;
 
     check_args(ac);
-    pid = fork();
-    command_path = get_command_path(envp, av);
-    cmd_options = ft_split(av[1], ' ');
+	if (pipe(pipe_fd) == -1)
+	{
+		printf("pipe error\n");
+		exit(EXIT_FAILURE);
+	}
+	pid = fork();
+	if (pid == -1)
+	{
+		printf("fork error\n");
+		exit(EXIT_FAILURE);
+	}
     if (pid == 0)
 	{
-		printf("Son >>> %d\n", pid);
-		execve(command_path, cmd_options, envp);
+		close(pipe_fd[0]);
+		fd_1 = open(av[1], O_RDONLY);
+
+		dup2(pipe_fd[1], STDOUT_FILENO);
+		dup2(fd_1, STDIN_FILENO);
+
+    	
+		command_path = get_command_path(envp, av);
+    	cmd_options = ft_split(av[1], ' ');
+		if (execve(command_path, cmd_options, envp) == -1)
+			printf("ERROR");
 	}
 	waitpid(pid, NULL, 0);
-	printf("Dad >>> %d\n", pid);
+	close(pipe_fd[1]);
+
+	fd_2 = open(av[4], O_RDONLY);
+	dup2(pipe_fd[0], STDIN_FILENO);
+	dup2(fd_2, STDOUT_FILENO);
+
+	command_path = get_command_path(envp, av);
+	cmd_options = ft_split(av[4], ' ');
+
+	if (execve(command_path, cmd_options, envp) == -1)
+			printf("ERROR");
 }
