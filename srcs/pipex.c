@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <sys/errno.h>
 
 char	*join_slash_and_comd_to_path(char *s1, char *s2)
 {
@@ -45,7 +46,7 @@ char	*join_slash_and_comd_to_path(char *s1, char *s2)
 	return (str);
 }
 
-void    check_args(int ac)
+void    exit_if_not_5_args(int ac)
 {
     if (ac < 2)
     {
@@ -70,7 +71,7 @@ char    *get_segmented_path(char **envp)
     exit(EXIT_FAILURE);
 }
 
-char    *get_command_path(char **envp, char **av)
+char    *get_command_path(char **envp, char *av)
 {
     char    **segmented_path;
     char    *command_path;
@@ -81,7 +82,8 @@ char    *get_command_path(char **envp, char **av)
     path_env = get_segmented_path(envp);
     segmented_path = ft_split(path_env, ':');
     free(path_env);
-    cmd = ft_split(av[1], ' ');
+    // cmd = ft_split(av[2], ' ');
+    cmd = ft_split(av, ' ');
     i = 0;
     while (segmented_path[i])
     {
@@ -101,9 +103,7 @@ char    *get_command_path(char **envp, char **av)
     exit(EXIT_FAILURE);
 }
 
-
-
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
     char    **cmd_options;
     char    *command_path;	
@@ -112,42 +112,38 @@ int main(int ac, char **av, char **envp)
 	int		fd_1;
 	int		fd_2;
 
-    check_args(ac);
+	(void)ac;
+
+    exit_if_not_5_args(ac);
 	if (pipe(pipe_fd) == -1)
-	{
-		printf("pipe error\n");
-		exit(EXIT_FAILURE);
-	}
+		return(perror("Pipe"), 1);
 	pid = fork();
 	if (pid == -1)
-	{
-		printf("fork error\n");
-		exit(EXIT_FAILURE);
-	}
+		return(perror("Fork"), 1);
     if (pid == 0)
 	{
 		close(pipe_fd[0]);
 		fd_1 = open(av[1], O_RDONLY);
-
-		dup2(pipe_fd[1], STDOUT_FILENO);
 		dup2(fd_1, STDIN_FILENO);
-
-    	
-		command_path = get_command_path(envp, av);
-    	cmd_options = ft_split(av[1], ' ');
+		dup2(pipe_fd[1], STDOUT_FILENO);
+		command_path = get_command_path(envp, av[2]);
+    	cmd_options = ft_split(av[2], ' ');
 		if (execve(command_path, cmd_options, envp) == -1)
-			printf("ERROR");
+			return (perror("Execve"), 1);
 	}
-	waitpid(pid, NULL, 0);
-	close(pipe_fd[1]);
-
-	fd_2 = open(av[4], O_RDONLY);
-	dup2(pipe_fd[0], STDIN_FILENO);
-	dup2(fd_2, STDOUT_FILENO);
-
-	command_path = get_command_path(envp, av);
-	cmd_options = ft_split(av[4], ' ');
-
-	if (execve(command_path, cmd_options, envp) == -1)
-			printf("ERROR");
+	// waitpid(pid, NULL, 0);
+	pid = fork();
+	if (pid == 0)
+	{ 
+		close(pipe_fd[1]);
+		fd_2 = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
+		dup2(pipe_fd[0], STDIN_FILENO);
+		dup2(fd_2, STDOUT_FILENO);
+		command_path = get_command_path(envp, av[3]);
+		cmd_options = ft_split(av[3], ' ');
+		close(pipe_fd[0]);
+		if (execve(command_path, cmd_options, envp) == -1)
+			return (perror("Execve"), 1);
+	}
+	printf("End\n");
 }

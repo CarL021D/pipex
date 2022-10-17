@@ -20,17 +20,9 @@
 # define TRUE 1
 # define FALSE 0
 
-// typedef struct s_data
-// {
-//     char *path;
-
-//     char *cmd_name;
-//     char *cmd_option;
-// }   t_data;
-
 //                  PIPEX
-void    check_args(int ac);
-char    *get_command_path(char **envp, char **av);
+void    exit_if_not_5_args(int ac);
+char    *get_command_path(char **envp, char *av);
 
 
 //                  UTILS
