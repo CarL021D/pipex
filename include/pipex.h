@@ -20,9 +20,19 @@
 # define TRUE 1
 # define FALSE 0
 
+typedef struct  s_cmd
+{
+    pid_t   pid1;
+    pid_t   pid2;
+    char    *cmd1_path;
+    char    *cmd1_options;
+    char    *cmd2_path;
+    char    *cmd2_options;
+}   t_cmd;
+
 //                  PIPEX
 void    exit_if_not_5_args(int ac);
-char    *get_command_path(char **envp, char *av);
+char    *get_command_path(char *av, char **envp);
 
 
 //                  UTILS

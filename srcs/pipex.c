@@ -71,7 +71,7 @@ char    *get_segmented_path(char **envp)
     exit(EXIT_FAILURE);
 }
 
-char    *get_command_path(char **envp, char *av)
+char    *get_command_path(char *av, char **envp)
 {
     char    **segmented_path;
     char    *command_path;
@@ -103,47 +103,123 @@ char    *get_command_path(char **envp, char *av)
     exit(EXIT_FAILURE);
 }
 
-int	main(int ac, char **av, char **envp)
+void exit_if_failed_fork(t_cmd *s_cmd)
 {
-    char    **cmd_options;
-    char    *command_path;	
-    pid_t   pid;
-	int		pipe_fd[2];
-	int		fd_1;
-	int		fd_2;
+	if (s_cmd->pid1 == -1 || s_cmd->pid2 == -1)
+	{
+		perror("Pipe");
+		exit(EXIT_FAILURE);
+	}
+}
 
-	(void)ac;
+void	child_1_exec(t_cmd *s_cmd, char **av, int *pipe_fd, char **envp)
+{
+	char    **cmd_options;
+	// char    *cmd_path;
+	int		fd;
 
-    exit_if_not_5_args(ac);
-	if (pipe(pipe_fd) == -1)
-		return(perror("Pipe"), 1);
-	pid = fork();
-	if (pid == -1)
-		return(perror("Fork"), 1);
-    if (pid == 0)
+	if (s_cmd->pid1 == 0)
 	{
 		close(pipe_fd[0]);
-		fd_1 = open(av[1], O_RDONLY);
-		dup2(fd_1, STDIN_FILENO);
+		fd = open(av[1], O_RDONLY);
+		dup2(fd, STDIN_FILENO);
 		dup2(pipe_fd[1], STDOUT_FILENO);
-		command_path = get_command_path(envp, av[2]);
-    	cmd_options = ft_split(av[2], ' ');
-		if (execve(command_path, cmd_options, envp) == -1)
-			return (perror("Execve"), 1);
+		s_cmd->cmd1_path = get_command_path(av[2], envp);
+		cmd_options = ft_split(av[2], ' ');
+		write(2, "11\n", 3);
+		if (execve(s_cmd->cmd1_path, cmd_options, envp) == -1)
+		{
+			perror("Execve");
+			exit(EXIT_FAILURE);
+		}
 	}
-	// waitpid(pid, NULL, 0);
-	pid = fork();
-	if (pid == 0)
-	{ 
+}
+
+void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_fd, char **envp)
+{
+    char    **cmd_options;
+	// char    *cmd_path;
+	int		fd;
+
+	if (s_cmd->pid2 == 0)
+	{
 		close(pipe_fd[1]);
-		fd_2 = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
+		fd = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
 		dup2(pipe_fd[0], STDIN_FILENO);
-		dup2(fd_2, STDOUT_FILENO);
-		command_path = get_command_path(envp, av[3]);
+		dup2(fd, STDOUT_FILENO);
+		s_cmd->cmd2_path = get_command_path(av[3], envp);
 		cmd_options = ft_split(av[3], ' ');
 		close(pipe_fd[0]);
-		if (execve(command_path, cmd_options, envp) == -1)
-			return (perror("Execve"), 1);
+		write(2, "22\n", 3);
+		if (execve(s_cmd->cmd2_path, cmd_options, envp) == -1)
+		{
+			perror("Execve");
+			exit(EXIT_FAILURE);
+		}
 	}
-	printf("End\n");
+}
+
+// void	parent_process_exec(t_cmd *s_cmd, int *pipe_fd)
+// {
+// 	// (void)pid_1;
+// 	(void)pid_2;
+// 	waitpid(s_cmd->pid1, NULL, 0);
+// 	// waitpid(pid_2, NULL, 0);
+// 	close(pipe_fd[0]);
+// 	// close(pipe_fd[1]);
+// 	free_struct(s_cmd);
+// 	write(2, "END\n", 4);
+// }
+
+// void	free_struct(t_cmd *s_cmd)
+// {
+// 	t_cmd	*s_tmp;
+// 	int		i;
+
+// 	s_tmp = s_cmd;
+// 	i = 4;
+// 	while (i)
+// 	{
+// 		if (*s_tmp != NULL)
+// 			free(*s_tmp);
+// 		s_tmp++;
+// 		i--;
+// 	}
+// }
+
+// void	init_struct(t_cmd *s_cmd)
+// {
+// 	t_cmd	*s_tmp;
+// 	int		i;
+
+// 	s_tmp = s_cmd;
+// 	i = 4;
+// 	while (i)
+// 	{
+// 		*s_tmp = NULL;
+// 		s_tmp++;
+// 		i--;
+// 	}
+// }
+
+int	main(int ac, char **av, char **envp)
+{
+	t_cmd	s_cmd;
+    // pid_t   pid_1;
+	// pid_t	pid_2;
+	int		pipe_fd[2];
+
+    exit_if_not_5_args(ac);
+	// init_cmd_struct(&s_cmd);
+	if (pipe(pipe_fd) == -1)
+		return(perror("Pipe"), 1);
+	s_cmd.pid1 = fork();
+	exit_if_failed_fork(&s_cmd);
+	child_1_exec(&s_cmd, av, pipe_fd, envp);
+	s_cmd.pid2 = fork();
+	exit_if_failed_fork(&s_cmd);
+	child_2_exec(&s_cmd, av, pipe_fd, envp);
+	// waitpid(pid_2, &status, 0);
+	printf("END\n");
+	// parent_process_exec(&s_cmd, pipe_fd);
 }
