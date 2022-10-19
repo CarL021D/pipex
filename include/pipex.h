@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/12 22:57:13 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/19 19:33:56 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,22 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define TRUE 1
-# define FALSE 0
+# define CHILD_1 1
+# define CHILD_2 2
 
 typedef struct  s_cmd
 {
     pid_t   pid1;
     pid_t   pid2;
     char    *cmd1_path;
-    char    *cmd1_options;
     char    *cmd2_path;
-    char    *cmd2_options;
+    char    **cmd1_options;
+    char    **cmd2_options;
 }   t_cmd;
 
 //                  PIPEX
 void    exit_if_not_5_args(int ac);
 char    *get_command_path(char *av, char **envp);
-
 
 //                  UTILS
 size_t  ft_strlen(char *str);
@@ -49,5 +48,10 @@ char    *get_segmented_path(char **envp);
 char    *path_str(char *full_path);
 char	*ft_strnstr(char *full_path, const char *s2, size_t n);
 char	*join_slash_and_comd_to_path(char *s1, char *s2);
+
+
+//                  FREE
+void    free_double_tab(char **tab);
+void	free_struct(t_cmd *s_cmd);
 
 #endif

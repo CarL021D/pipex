@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 08:03:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/12 23:26:53 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/19 19:47:45 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ char	*join_slash_and_comd_to_path(char *s1, char *s2)
 
 void    exit_if_not_5_args(int ac)
 {
-    if (ac < 2)
+    if (ac != 5)
     {
-        write(1, "Not enough arguments\n", 21);
+        write(1, "5 arguments are required\n", 26);
         exit(EXIT_FAILURE);
     }
 }
@@ -71,38 +71,6 @@ char    *get_segmented_path(char **envp)
     exit(EXIT_FAILURE);
 }
 
-char    *get_command_path(char *av, char **envp)
-{
-    char    **segmented_path;
-    char    *command_path;
-    char    *path_env;
-    char    **cmd;
-    int     i;
-
-    path_env = get_segmented_path(envp);
-    segmented_path = ft_split(path_env, ':');
-    free(path_env);
-    // cmd = ft_split(av[2], ' ');
-    cmd = ft_split(av, ' ');
-    i = 0;
-    while (segmented_path[i])
-    {
-        command_path = join_slash_and_comd_to_path(segmented_path[i], cmd[0]);
-        if (access(command_path, F_OK | X_OK) == 0)
-        {
-            free(segmented_path);
-            return (command_path);
-        }
-        i++;
-    }
-
-    // SECURE EVTHG ???
-    
-    free(segmented_path);
-    free(command_path);
-    exit(EXIT_FAILURE);
-}
-
 void exit_if_failed_fork(t_cmd *s_cmd)
 {
 	if (s_cmd->pid1 == -1 || s_cmd->pid2 == -1)
@@ -112,10 +80,37 @@ void exit_if_failed_fork(t_cmd *s_cmd)
 	}
 }
 
+char    *get_command_path(char *av, char **envp)
+{
+	char    **segmented_path;
+	char    *command_path;
+	char    *path_env;
+    char    **cmd;
+    int     i;
+
+    path_env = get_segmented_path(envp);
+    segmented_path = ft_split(path_env, ':');
+    free(path_env);
+    cmd = ft_split(av, ' ');
+    i = 0;
+    while (segmented_path[i])
+    {
+        command_path = join_slash_and_comd_to_path(segmented_path[i], cmd[0]);
+		
+		if (access(command_path, F_OK | X_OK) == 0)
+        {
+			free_double_tab(segmented_path);
+			return (command_path);
+		}
+		i++;
+	}
+	free_double_tab(segmented_path);
+	free(command_path);
+	exit(EXIT_FAILURE);
+}
+
 void	child_1_exec(t_cmd *s_cmd, char **av, int *pipe_fd, char **envp)
 {
-	char    **cmd_options;
-	// char    *cmd_path;
 	int		fd;
 
 	if (s_cmd->pid1 == 0)
@@ -125,9 +120,10 @@ void	child_1_exec(t_cmd *s_cmd, char **av, int *pipe_fd, char **envp)
 		dup2(fd, STDIN_FILENO);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		s_cmd->cmd1_path = get_command_path(av[2], envp);
-		cmd_options = ft_split(av[2], ' ');
+		free(get_command_path(av[2], envp));
+		s_cmd->cmd1_options = ft_split(av[2], ' ');
 		write(2, "11\n", 3);
-		if (execve(s_cmd->cmd1_path, cmd_options, envp) == -1)
+		if (execve(s_cmd->cmd1_path, s_cmd->cmd1_options, envp) == -1)
 		{
 			perror("Execve");
 			exit(EXIT_FAILURE);
@@ -137,8 +133,6 @@ void	child_1_exec(t_cmd *s_cmd, char **av, int *pipe_fd, char **envp)
 
 void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_fd, char **envp)
 {
-    char    **cmd_options;
-	// char    *cmd_path;
 	int		fd;
 
 	if (s_cmd->pid2 == 0)
@@ -148,10 +142,11 @@ void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_fd, char **envp)
 		dup2(pipe_fd[0], STDIN_FILENO);
 		dup2(fd, STDOUT_FILENO);
 		s_cmd->cmd2_path = get_command_path(av[3], envp);
-		cmd_options = ft_split(av[3], ' ');
+		free(get_command_path(av[3], envp));
+		s_cmd->cmd2_options = ft_split(av[3], ' ');
 		close(pipe_fd[0]);
 		write(2, "22\n", 3);
-		if (execve(s_cmd->cmd2_path, cmd_options, envp) == -1)
+		if (execve(s_cmd->cmd2_path, s_cmd->cmd2_options, envp) == -1)
 		{
 			perror("Execve");
 			exit(EXIT_FAILURE);
@@ -159,58 +154,30 @@ void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_fd, char **envp)
 	}
 }
 
-// void	parent_process_exec(t_cmd *s_cmd, int *pipe_fd)
-// {
-// 	// (void)pid_1;
-// 	(void)pid_2;
-// 	waitpid(s_cmd->pid1, NULL, 0);
-// 	// waitpid(pid_2, NULL, 0);
-// 	close(pipe_fd[0]);
-// 	// close(pipe_fd[1]);
-// 	free_struct(s_cmd);
-// 	write(2, "END\n", 4);
-// }
+void	parent_process_exec(t_cmd *s_cmd, int *pipe_fd)
+{
+	waitpid(s_cmd->pid1, NULL, 0);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+	// free_struct(s_cmd);
+	write(2, "END\n", 4);
+}
 
-// void	free_struct(t_cmd *s_cmd)
-// {
-// 	t_cmd	*s_tmp;
-// 	int		i;
-
-// 	s_tmp = s_cmd;
-// 	i = 4;
-// 	while (i)
-// 	{
-// 		if (*s_tmp != NULL)
-// 			free(*s_tmp);
-// 		s_tmp++;
-// 		i--;
-// 	}
-// }
-
-// void	init_struct(t_cmd *s_cmd)
-// {
-// 	t_cmd	*s_tmp;
-// 	int		i;
-
-// 	s_tmp = s_cmd;
-// 	i = 4;
-// 	while (i)
-// 	{
-// 		*s_tmp = NULL;
-// 		s_tmp++;
-// 		i--;
-// 	}
-// }
+void	init_cmd_struct(t_cmd *s_cmd)
+{
+	s_cmd->cmd1_path = NULL;
+	s_cmd->cmd2_path = NULL;
+	s_cmd->cmd1_options = NULL;
+	s_cmd->cmd2_options = NULL;
+}
 
 int	main(int ac, char **av, char **envp)
 {
 	t_cmd	s_cmd;
-    // pid_t   pid_1;
-	// pid_t	pid_2;
 	int		pipe_fd[2];
 
     exit_if_not_5_args(ac);
-	// init_cmd_struct(&s_cmd);
+	init_cmd_struct(&s_cmd);
 	if (pipe(pipe_fd) == -1)
 		return(perror("Pipe"), 1);
 	s_cmd.pid1 = fork();
@@ -219,7 +186,5 @@ int	main(int ac, char **av, char **envp)
 	s_cmd.pid2 = fork();
 	exit_if_failed_fork(&s_cmd);
 	child_2_exec(&s_cmd, av, pipe_fd, envp);
-	// waitpid(pid_2, &status, 0);
-	printf("END\n");
-	// parent_process_exec(&s_cmd, pipe_fd);
+	parent_process_exec(&s_cmd, pipe_fd);
 }
