@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/20 16:13:43 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/20 17:07:12 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 typedef struct s_cmd
 {
-	pid_t	pid1;
-	pid_t	pid2;
+	pid_t	pid_1;
+	pid_t	pid_2;
 	int		fd_1;
 	int		fd_2;
 	char	*cmd1_path;

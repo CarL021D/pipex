@@ -1,42 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_handler.c                                    :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/20 17:08:55 by caboudar         ###   ########.fr       */
+/*   Created: 2022/10/12 23:05:14 by caboudar          #+#    #+#             */
+/*   Updated: 2022/10/20 16:06:21 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	exit_if_not_5_args(int ac)
+void	free_double_tab(char **tab)
 {
-	if (ac != 5)
+	int		i;
+
+	i = 0;
+	while (tab[i])
 	{
-		write(1, "5 arguments are required\n", 26);
-		exit(EXIT_FAILURE);
+		free(tab[i]);
+		i++;
 	}
+	free(tab);
 }
 
-void	exit_if_failed_dup(void)
+void	free_struct(t_cmd *s_cmd)
 {
-	perror("Dup2");
-	exit(EXIT_FAILURE);
-}
-
-void	exit_if_failed_fork(t_cmd *s_cmd, int child)
-{
-	if (child == 1 && s_cmd->pid_1 == -1)
-	{
-		perror("Pipe");
-		exit(EXIT_FAILURE);
-	}
-	if (child == 2 && s_cmd->pid_2 == -1)
-	{
-		perror("Pipe");
-		exit(EXIT_FAILURE);
-	}
+	if (s_cmd->cmd1_path != NULL)
+		free(s_cmd->cmd1_path);
+	if (s_cmd->cmd2_path != NULL)
+		free(s_cmd->cmd2_path);
+	if (s_cmd->cmd1_options != NULL)
+		free_double_tab(s_cmd->cmd1_options);
+	if (s_cmd->cmd2_options != NULL)
+		free_double_tab(s_cmd->cmd2_options);
 }
