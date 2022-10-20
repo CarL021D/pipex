@@ -6,13 +6,13 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/19 22:32:58 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/20 16:10:48 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void    exit_if_not_5_args(int ac)
+void	exit_if_not_5_args(int ac)
 {
 	if (ac != 5)
 	{
@@ -21,10 +21,10 @@ void    exit_if_not_5_args(int ac)
 	}
 }
 
-void	exit_if_failed_dup()
+void	exit_if_failed_dup(void)
 {
-		perror("Dup2");
-		exit(EXIT_FAILURE);
+	perror("Dup2");
+	exit(EXIT_FAILURE);
 }
 
 void	exit_if_failed_fork(t_cmd *s_cmd, int child)

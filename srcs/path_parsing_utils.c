@@ -6,13 +6,13 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 01:34:04 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/19 22:21:39 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/20 16:11:15 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-size_t  ft_strlen(char *str)
+size_t	ft_strlen(char *str)
 {
 	int		i;
 

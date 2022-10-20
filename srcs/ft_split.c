@@ -6,13 +6,13 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:01:46 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/19 22:39:38 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/20 16:08:26 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-static void    free_tab(char **arr, int i)
+static void	free_tab(char **arr, int i)
 {
 	while (i)
 	{

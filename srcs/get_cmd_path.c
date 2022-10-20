@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/19 22:43:53 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/20 16:09:33 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@ static char	*join_slash_and_comd_to_path(char *s1, char *s2)
 	size_t		j;
 
 	l_s1 = ft_strlen((char *)s1);
-	l_s2 = ft_strlen((char *)s2);    
+	l_s2 = ft_strlen((char *)s2);
 	str = malloc(sizeof(char) * (l_s1 + l_s2 + 2));
-	// FREE
 	if (!str)
 		return (NULL);
 	i = -1;
@@ -44,7 +43,6 @@ char	*path_str(char *full_path)
 	int		i;
 
 	path = malloc(sizeof(char) * ft_strlen(full_path) + 1);
-	// FREE
 	if (!path)
 		exit(EXIT_FAILURE);
 	i = 0;
@@ -57,7 +55,7 @@ char	*path_str(char *full_path)
 	return (path);
 }
 
-static char    *cmd_env_path_line(char **envp)
+static char	*cmd_env_path_line(char **envp)
 {
 	char	*path_env;
 	int		i;
@@ -73,7 +71,7 @@ static char    *cmd_env_path_line(char **envp)
 	exit(EXIT_FAILURE);
 }
 
-char    *get_command_path(char *av, char **envp)
+char	*get_command_path(char *av, char **envp)
 {
 	char	**segmented_path;
 	char	*command_path;

@@ -6,15 +6,15 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 23:05:14 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/19 22:10:40 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/20 16:06:21 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void    free_double_tab(char **tab)
+void	free_double_tab(char **tab)
 {
-	int     i;
+	int		i;
 
 	i = 0;
 	while (tab[i])
