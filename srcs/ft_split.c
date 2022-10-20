@@ -6,13 +6,13 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:01:46 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/19 22:10:52 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/19 22:39:38 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void    free_tab(char **arr, int i)
+static void    free_tab(char **arr, int i)
 {
 	while (i)
 	{
@@ -22,7 +22,7 @@ void    free_tab(char **arr, int i)
 	free(arr);
 }
 
-int	ft_word_len(char *str, char charset)
+static int	ft_word_len(char *str, char charset)
 {
 	int		i;
 
@@ -32,7 +32,7 @@ int	ft_word_len(char *str, char charset)
 	return (i);
 }
 
-int	ft_word_count(char *str, char charset)
+static int	ft_word_count(char *str, char charset)
 {
 	int		count;
 	int		i;
@@ -53,7 +53,7 @@ int	ft_word_count(char *str, char charset)
 	return (count);
 }
 
-char	*ft_malloc_word(char *str, char charset)
+static char	*ft_malloc_word(char *str, char charset)
 {
 	char	*word;
 	int		size;

@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 01:34:04 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/19 22:11:34 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/19 22:21:39 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,25 +54,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		str[i++] = (char)s[start++];
 	str[i] = '\0';
 	return (str);
-}
-
-char	*path_str(char *full_path)
-{
-	char	*path;
-	int		i;
-
-	path = malloc(sizeof(char) * ft_strlen(full_path) + 1);
-	// FREE
-	if (!path)
-		exit(EXIT_FAILURE);
-	i = 0;
-	while (full_path[i])
-	{
-		path[i] = full_path[i];
-		i++;
-	}
-	path[i] = '\0';
-	return (path);
 }
 
 char	*ft_strnstr(char *full_path, const char *s2, size_t n)
