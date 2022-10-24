@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../../includes/pipex_bonus.h"
 
 static char	*join_slash_and_comd_to_path(char *s1, char *s2)
 {

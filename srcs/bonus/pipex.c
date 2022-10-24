@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../../includes/pipex_bonus.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -19,8 +19,29 @@
 #include <sys/wait.h>
 #include <sys/errno.h>
 
-static void	init_cmd_struct(t_cmd *s_cmd)
+int	str_cmp(const char *s1, const char *s2)
 {
+	char			*str_1;
+	char			*str_2;
+    int             i;
+
+	str_1 = (char *)s1;
+	str_2 = (char *)s2;
+	i = 0;
+
+	while ((str_1[i] || str_2[i]) && str_1[i] == str_2[i])
+		i++;
+    if (str_1[i] == '\0' && str_2[i] == '\0')
+        return (1);
+    return (0);
+}
+
+static void	init_cmd_struct(t_cmd *s_cmd, char **av)
+{
+	if (!str_cmp(av[1], "here_doc"))
+		s_cmd->i = 2;
+	else
+		
 	s_cmd->cmd1_path = NULL;
 	s_cmd->cmd2_path = NULL;
 	s_cmd->cmd1_options = NULL;
@@ -52,6 +73,11 @@ static void	child_1_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 	}
 }
 
+static void pass_cmd_to_pipe(t_cmd s_cmd, char **av, int *pipe_, char **envp)
+{
+
+}
+
 static void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 {
 	if (s_cmd->pid_2 == 0)
@@ -75,6 +101,11 @@ static void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 	}
 }
 
+
+
+
+
+
 static void	parent_process_exec(t_cmd *s_cmd, int *pipe_)
 {
 	close(s_cmd->fd_1);
@@ -92,7 +123,7 @@ int	main(int ac, char **av, char **envp)
 	int		pipe_[2];
 
 	exit_if_not_5_args(ac);
-	init_cmd_struct(&s_cmd);
+	init_cmd_struct(&s_cmd, av);
 	if (pipe(pipe_) == -1)
 		return (perror("Pipe"), 1);
 	s_cmd.fd_1 = open(av[1], O_RDONLY);

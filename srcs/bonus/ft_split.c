@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../../includes/pipex_bonus.h"
 
 static void	free_tab(char **arr, int i)
 {

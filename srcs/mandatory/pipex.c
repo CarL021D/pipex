@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../includes/pipex.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>

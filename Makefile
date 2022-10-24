@@ -30,21 +30,34 @@ NAME		= pipex
 #               SOURCES              #
 # ################################## #
 C_DIR		= srcs
-C_FILES		=	pipex.c \
-				ft_split.c \
-				get_cmd_path.c \
-				path_parsing_utils.c \
-				ft_free.c \
-				error_handler.c \
+C_FILES		=	pipex.c 				\
+				ft_split.c				\
+				get_cmd_path.c 			\
+				path_parsing_utils.c	\
+				ft_free.c				\
+				error_handler.c			\
+
+C_DIR_B		= srcs/bonus
+C_FILES_B	=	pipex.c 				\
+				ft_split.c				\
+				get_cmd_path.c 			\
+				path_parsing_utils.c	\
+				ft_free.c				\
+				error_handler.c			\
 
 SRCS		= $(patsubst %, $(C_DIR)/%, $(C_FILES))
+SRCS_B		= $(patsubst %, $(C_DIR_B)/%, $(C_FILES_B))
 
 # ################################## #
 #               OBJECTS              #
 # ################################## #
 O_DIR		= objs
+
 O_FILES		= $(C_FILES:.c=.o)
+O_FILES_B	= $(C_FILES_B:.c=.o)
+
 OBJS		= $(patsubst %, $(O_DIR)/%, $(O_FILES))
+OBJS_B		= $(patsubst %, $(O_DIR)/%, $(O_FILES_B))
 
 # ################################## #
 #                FLAGS               #
@@ -62,6 +75,8 @@ all:		$(NAME)
 $(NAME):	$(O_DIR) $(OBJS)
 			@$(CC) $(CFLAGS) $(OBJS) -o $@
 			@echo "${GREEN}- compiling pipex executable${RESET}"
+
+
 
 $(O_DIR)/%.o: $(C_DIR)/%.c
 			@$(CC) $(CFLAGS) $(CINCLUDES) -c $< -o $@
