@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/24 16:33:24 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/24 18:27:23 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ typedef struct s_cmd
 	char	**cmd1_options;
 	char	**cmd2_options;
 	char	**env_p;
-
-	int		*pid_arr;
-	int		pid_count;
 	
 	int		exec_index;
+
+	pid_t	*pid_arr;
+	int		pid_count;
 }	t_cmd;
 
 //                  PIPEX
-void	exit_if_less__than_5_args(int ac);
+void	exit_if_less_than_5_args(int ac);
 char	*get_command_path(char *av, char **envp);
 
 //                  UTILS

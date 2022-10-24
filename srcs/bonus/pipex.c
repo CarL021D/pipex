@@ -48,7 +48,7 @@ int	str_cmp(const char *s1, const char *s2)
 {
 	char			*str_1;
 	char			*str_2;
-    int             i;
+	int				i;
 
 	str_1 = (char *)s1;
 	str_2 = (char *)s2;
@@ -56,9 +56,9 @@ int	str_cmp(const char *s1, const char *s2)
 
 	while ((str_1[i] || str_2[i]) && str_1[i] == str_2[i])
 		i++;
-    if (str_1[i] == '\0' && str_2[i] == '\0')
-        return (1);
-    return (0);
+	if (str_1[i] == '\0' && str_2[i] == '\0')
+		return (1);
+	return (0);
 }
 
 static void	init_cmd_struct(t_cmd *s_cmd, char **av)
@@ -162,7 +162,8 @@ int main(int ac, char **av, char **envp)
 	t_cmd	s_cmd;
 	int		pipe_[2];
 
-	exit_if_less__than_5_args(ac);
+
+	exit_if_less_than_5_args(ac);
 	init_cmd_struct(&s_cmd, av);
 	if (pipe(pipe_) == -1)
 		return (perror("Pipe"), 1);
@@ -173,12 +174,10 @@ int main(int ac, char **av, char **envp)
 	s_cmd.fd_2 = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	while (s_cmd.exec_index < ac - 1)
 	{
-		s_cmd.pid_2 = fork();
+		s_cmd.pid_arr[s_cmd.pid_count] = fork();
 		exit_if_failed_fork(&s_cmd, CHILD_2);
 		exec_process(&s_cmd, ac, av, pipe_, envp);
 		s_cmd.exec_index++;
-		printf("%d\n", s_cmd.exec_index);
 	}
-	printf("\n%d", s_cmd.pid_count);
 	exec_parent_process(&s_cmd, pipe_);
 }
