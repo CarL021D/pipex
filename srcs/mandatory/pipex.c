@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 08:03:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/20 17:07:00 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/24 16:01:04 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 	}
 }
 
-static void	parent_process_exec(t_cmd *s_cmd, int *pipe_)
+static void	exec_parent_process(t_cmd *s_cmd, int *pipe_)
 {
 	close(s_cmd->fd_1);
 	close(s_cmd->fd_2);
@@ -103,5 +103,5 @@ int	main(int ac, char **av, char **envp)
 	s_cmd.pid_2 = fork();
 	exit_if_failed_fork(&s_cmd, CHILD_2);
 	child_2_exec(&s_cmd, av, pipe_, envp);
-	parent_process_exec(&s_cmd, pipe_);
+	exec_parent_process(&s_cmd, pipe_);
 }

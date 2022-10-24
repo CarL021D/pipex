@@ -6,15 +6,15 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/20 17:08:43 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/10/24 16:33:08 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/pipex_bonus.h"
 
-void	exit_if_not_5_args(int ac)
+void	exit_if_less__than_5_args(int ac)
 {
-	if (ac != 5)
+	if (ac < 5)
 	{
 		write(1, "5 arguments are required\n", 26);
 		exit(EXIT_FAILURE);

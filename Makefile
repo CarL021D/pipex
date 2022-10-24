@@ -5,98 +5,65 @@
 #                                                     +:+ +:+         +:+      #
 #    By: caboudar <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/10/05 07:40:34 by caboudar          #+#    #+#              #
-#    Updated: 2022/10/19 22:22:09 by caboudar         ###   ########.fr        #
+#    Created: 2022/10/24 15:12:48 by caboudar          #+#    #+#              #
+#    Updated: 2022/10/24 16:30:58 by caboudar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-RED=\033[0;91m
-GREEN=\033[0;32m
-RESET=\033[0m
+NAME = pipex
 
-# ################################## #
-#               COMMAND              #
-# ################################## #
-CC			= gcc
-MKDIR		= mkdir -p
-RM			= rm -rf
-
-# ################################## #
-#              EXEC NAME             #
-# ################################## #
-NAME		= pipex
-
-# ################################## #
-#               SOURCES              #
-# ################################## #
-C_DIR		= srcs
-C_FILES		=	pipex.c 				\
-				ft_split.c				\
-				get_cmd_path.c 			\
-				path_parsing_utils.c	\
-				ft_free.c				\
-				error_handler.c			\
-
-C_DIR_B		= srcs/bonus
-C_FILES_B	=	pipex.c 				\
-				ft_split.c				\
-				get_cmd_path.c 			\
-				path_parsing_utils.c	\
-				ft_free.c				\
-				error_handler.c			\
-
-SRCS		= $(patsubst %, $(C_DIR)/%, $(C_FILES))
-SRCS_B		= $(patsubst %, $(C_DIR_B)/%, $(C_FILES_B))
-
-# ################################## #
-#               OBJECTS              #
-# ################################## #
-O_DIR		= objs
-
-O_FILES		= $(C_FILES:.c=.o)
-O_FILES_B	= $(C_FILES_B:.c=.o)
-
-OBJS		= $(patsubst %, $(O_DIR)/%, $(O_FILES))
-OBJS_B		= $(patsubst %, $(O_DIR)/%, $(O_FILES_B))
-
-# ################################## #
-#                FLAGS               #
-# ################################## #
-CFLAGS		= -Wall -Wextra -Werror -g
-
-CINCLUDES	= -I ./inc \
-
-# ################################## #
-#                RULES               #
-# ################################## #
-
-all:		$(NAME)
-
-$(NAME):	$(O_DIR) $(OBJS)
-			@$(CC) $(CFLAGS) $(OBJS) -o $@
-			@echo "${GREEN}- compiling pipex executable${RESET}"
+SRCS	= 		srcs/pipex.c 				\
+				srcs/ft_split.c				\
+				srcs/get_cmd_path.c 		\
+				srcs/path_parsing_utils.c	\
+				srcs/ft_free.c				\
+				srcs/error_handler.c		\
+				
+SRCS_B =		srcs/bonus/pipex.c					\
+				srcs/bonus/ft_split.c				\
+				srcs/bonus/get_cmd_path.c			\
+				srcs/bonus/path_parsing_utils.c		\
+				srcs/bonus/ft_free.c				\
+				srcs/bonus/error_handler.c			\
 
 
+OBJS	= ${SRCS:.c=.o}
 
-$(O_DIR)/%.o: $(C_DIR)/%.c
-			@$(CC) $(CFLAGS) $(CINCLUDES) -c $< -o $@
+OBJS_B	= ${SRCS_B:.c=.o}
 
-$(O_DIR):
-			@$(MKDIR) $(O_DIR)
-			@echo "${GREEN}- creating pipex objects directory${RESET}"
+CFLAGS	= -Wall -Werror -Wextra -g
 
-# ################################## #
-#                CLEAN               #
-# ################################## #
+CC		= gcc
+
+RM		= rm -f
+
+INCS    = includes
+
+all:	${NAME}
+
+.c.o:
+		@$(CC) ${CFLAGS} -I$(INCS) -c $< -o $@
+
+${NAME}:	${OBJS} ${MLX}
+		@${CC} ${CFLAGS} ${OBJS} -lX11 -lXext -o pipex
+		@printf "%s\e[0;32m pipex : Compiling object file into executable\n\e[0m" "-"
+
+bonus: ${OBJS_B}
+		${CC} ${CFLAGS} ${OBJS_B} -I$(INCS) -lX11 -lXext -o pipex
+		@printf "%s\e[0;32m pipex : Compiling bonus object file into executable\n\e[0m" "-"
 
 clean:
-			@$(RM) $(O_DIR)
-			@echo "${RED}- deleting pipex objects${RESET}"
+		@${RM} ${OBJS}
+		@${RM} ${OBJS_B}
+		@printf "%s\e[0;31m pipex : Delete all object files\n\e[0m" "-"
 
-fclean:		clean
-			@$(RM) $(NAME)
-			@echo "${RED}- delete pipex executable${RESET}"
+fclean:
+		@${RM} ${OBJS}
+		@${RM} ${OBJS_B}
+		@printf "%s\e[0;31m pipex : Delete all object files\n\e[0m" "-"
+		@${RM} ${NAME}
+		@printf "%s\e[0;31m pipex : Delete executable\n\e[0m" "-"
 
-re:			fclean all
+re: fclean ${NAME}
 
-.PHONY: all check clean fclean re
+.PHONY: all clean fclean re bonus
