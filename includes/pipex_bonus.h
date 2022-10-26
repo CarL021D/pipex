@@ -24,15 +24,19 @@ typedef struct s_cmd
 {
 	pid_t	pid_1;
 	pid_t	pid_2;
+	pid_t	pid_3;
 	int		fd_1;
 	int		fd_2;
 	char	*cmd1_path;
 	char	*cmd2_path;
+	char	*cmd3_path;
 	char	**cmd1_options;
 	char	**cmd2_options;
+	char	**cmd3_options;
 	char	**env_p;
 	
-	int		exec_index;
+	int		cmd_nb;
+	int		cmd_count;
 
 	pid_t	*pid_arr;
 	int		pid_count;

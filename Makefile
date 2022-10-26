@@ -45,11 +45,11 @@ all:	${NAME}
 		@$(CC) ${CFLAGS} -I$(INCS) -c $< -o $@
 
 ${NAME}:	${OBJS} ${MLX}
-		@${CC} ${CFLAGS} ${OBJS} -lX11 -lXext -o pipex
+		@${CC} ${CFLAGS} ${OBJS} -o pipex
 		@printf "%s\e[0;32m pipex : Compiling object file into executable\n\e[0m" "-"
 
 bonus: ${OBJS_B}
-		${CC} ${CFLAGS} ${OBJS_B} -I$(INCS) -lX11 -lXext -o pipex
+		${CC} ${CFLAGS} ${OBJS_B} -I$(INCS) -o pipex
 		@printf "%s\e[0;32m pipex : Compiling bonus object file into executable\n\e[0m" "-"
 
 clean:
