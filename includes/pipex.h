@@ -24,8 +24,8 @@ typedef struct s_cmd
 {
 	pid_t	pid_1;
 	pid_t	pid_2;
-	int		fd_1;
-	int		fd_2;
+	int		fd_in;
+	int		fd_out;
 	char	*cmd1_path;
 	char	*cmd2_path;
 	char	**cmd1_options;

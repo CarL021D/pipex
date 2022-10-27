@@ -12,7 +12,7 @@
 
 #include "../../includes/pipex_bonus.h"
 
-static void	free_tab(char **arr, int i)
+static void	free_split_tab(char **arr, int i)
 {
 	while (i)
 	{
@@ -88,7 +88,7 @@ char	**ft_split(char *str, char c)
 		arr[i] = ft_malloc_word(str + j, c);
 		if (!arr[i])
 		{
-			free_tab(arr, i);
+			free_split_tab(arr, i);
 			return (NULL);
 		}
 		j += ft_word_len(str + j, c);

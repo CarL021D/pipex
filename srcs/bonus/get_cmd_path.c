@@ -94,7 +94,7 @@ char	*get_command_path(char *av, char **envp)
 		}
 		i++;
 	}
-	free_double_tab(segmented_path);
 	free(command_path);
+	free_double_tab(segmented_path);
 	exit(EXIT_FAILURE);
 }

@@ -12,8 +12,6 @@
 
 #include "../../includes/pipex_bonus.h"
 
-// void	close_pipe_and_fd(int *pipe, )
-
 void	free_double_tab(char **tab)
 {
 	int		i;
@@ -27,16 +25,23 @@ void	free_double_tab(char **tab)
 	free(tab);
 }
 
-void	free_struct(t_cmd *s_cmd)
+void	free_cmd_line(t_cmd *s_cmd)
 {
-	if (s_cmd->cmd1_path != NULL)
-		free(s_cmd->cmd1_path);
-	if (s_cmd->cmd2_path != NULL)
-		free(s_cmd->cmd2_path);
-	if (s_cmd->cmd1_options != NULL)
-		free_double_tab(s_cmd->cmd1_options);
-	if (s_cmd->cmd2_options != NULL)
-		free_double_tab(s_cmd->cmd2_options);
-	if (s_cmd->pid_arr != NULL)
-		free(s_cmd->pid_arr);
+	free(s_cmd->cmd_path);
+	free_double_tab(s_cmd->cmd_options);
 }
+
+
+// void	free_struct(t_cmd *s_cmd)
+// {
+// 	if (s_cmd->cmd1_path != NULL)
+// 		free(s_cmd->cmd1_path);
+// 	if (s_cmd->cmd2_path != NULL)
+// 		free(s_cmd->cmd2_path);
+// 	if (s_cmd->cmd1_options != NULL)
+// 		free_double_tab(s_cmd->cmd1_options);
+// 	if (s_cmd->cmd2_options != NULL)
+// 		free_double_tab(s_cmd->cmd2_options);
+// 	if (s_cmd->pid_arr != NULL)
+// 		free(s_cmd->pid_arr);
+// }
