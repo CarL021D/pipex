@@ -25,7 +25,8 @@ SRCS_B =		srcs/bonus/pipex.c					\
 				srcs/bonus/path_parsing_utils.c		\
 				srcs/bonus/ft_free.c				\
 				srcs/bonus/error_handler.c			\
-
+				srcs/bonus/get_next_line.c			\
+				srcs/bonus/get_next_line_utils.c	\
 
 OBJS	= ${SRCS:.c=.o}
 

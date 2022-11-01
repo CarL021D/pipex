@@ -27,14 +27,9 @@ void	exit_if_failed_dup(void)
 	exit(EXIT_FAILURE);
 }
 
-void	exit_if_failed_fork(t_cmd *s_cmd, int child)
+void	exit_if_failed_fork(t_cmd *s_cmd)
 {
-	if (child == 1 && s_cmd->pid_1 == -1)
-	{
-		perror("Pipe");
-		exit(EXIT_FAILURE);
-	}
-	if (child == 2 && s_cmd->pid_2 == -1)
+	if (s_cmd->pid_arr[s_cmd->fork_count] == -1)
 	{
 		perror("Pipe");
 		exit(EXIT_FAILURE);

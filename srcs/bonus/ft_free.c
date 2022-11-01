@@ -27,7 +27,9 @@ void	free_double_tab(char **tab)
 
 void	free_cmd_line(t_cmd *s_cmd)
 {
+	printf("11111 %s\n", s_cmd->cmd_path);
 	free(s_cmd->cmd_path);
+	printf("2222 %s\n", s_cmd->cmd_options[0]);
 	free_double_tab(s_cmd->cmd_options);
 }
 

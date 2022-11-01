@@ -19,20 +19,19 @@
 
 # define CHILD_1 1
 # define CHILD_2 2
+# define BUFFER_SIZE 10
 
 typedef struct s_cmd
 {
-	// pid_t	pid_1;
-	// pid_t	pid_2;
-	// pid_t	pid_3;
 	int		fd_in;
 	int		fd_out;
 
-	char	*cmd_path;
-	// char	*cmd1_path;
-	// char	*cmd2_path;
-	// char	*cmd3_path;
 
+	// try setting pipe into the structure 
+	int		pipe_[2];
+	int		temp_pipe[2];
+
+	char	*cmd_path;
 	
 	char	**cmd_options;
 	char	**env_p;
@@ -40,9 +39,6 @@ typedef struct s_cmd
 
 	// index going through each arguments
 	int		arg_index;
-
-	// int		pid_index;
-
 
 	// number of fork that are stored inside the pid array
 	int		fork_count;
@@ -65,11 +61,16 @@ char	*ft_strnstr(char *full_path, const char *s2, size_t n);
 
 //                  ERROR
 void	exit_if_failed_dup(void);
-void	exit_if_failed_fork(t_cmd *s_cmd, int child);
+void	exit_if_failed_fork(t_cmd *s_cmd);
 
 //                  FREE
 void	free_cmd_line(t_cmd *s_cmd);
 void	free_double_tab(char **tab);
 void	free_struct(t_cmd *s_cmd);
+
+//					GET NEXT LINE
+char	*get_next_line(int fd);
+char	*ft_strjoin(char *s1, char *buffer);
+int		still_on_line(char *stash);
 
 #endif

@@ -43,7 +43,6 @@ static void	child_1_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 		if (dup2(pipe_[1], STDOUT_FILENO) == -1)
 			exit_if_failed_dup();
 		s_cmd->cmd1_path = get_command_path(av[2], envp);
-		// free(get_command_path(av[2], envp));
 		s_cmd->cmd1_options = ft_split(av[2], ' ');
 		close(pipe_[1]);
 		execve(s_cmd->cmd1_path, s_cmd->cmd1_options, envp);
@@ -66,7 +65,6 @@ static void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 			exit_if_failed_dup();
 		close(s_cmd->fd_out);
 		s_cmd->cmd2_path = get_command_path(av[3], envp);
-		// free(get_command_path(av[3], envp));
 		s_cmd->cmd2_options = ft_split(av[3], ' ');
 		close(pipe_[0]);
 		execve(s_cmd->cmd2_path, s_cmd->cmd2_options, envp);
