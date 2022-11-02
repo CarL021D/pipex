@@ -97,7 +97,7 @@ int	main(int ac, char **av, char **envp)
 	s_cmd.pid_1 = fork();
 	exit_if_failed_fork(&s_cmd, CHILD_1);
 	child_1_exec(&s_cmd, av, pipe_, envp);
-	s_cmd.fd_out = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	s_cmd.fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	s_cmd.pid_2 = fork();
 	exit_if_failed_fork(&s_cmd, CHILD_2);
 	child_2_exec(&s_cmd, av, pipe_, envp);

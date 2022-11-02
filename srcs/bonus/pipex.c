@@ -21,18 +21,14 @@
 #include <sys/wait.h>
 #include <sys/errno.h>
 
-int	str_cmp(const char *s1, const char *s2)
+int	str_cmp(char *s1, char *s2)
 {
-	char			*str_1;
-	char			*str_2;
 	int				i;
 
-	str_1 = (char *)s1;
-	str_2 = (char *)s2;
 	i = 0;
-	while ((str_1[i] || str_2[i]) && str_1[i] == str_2[i])
+	while ((s1[i] || s2[i]) && s1[i] == s2[i])
 		i++;
-	if (str_1[i] == '\0' && str_2[i] == '\0')
+	if (!s1[i] && !s2[i])
 		return (1);
 	return (0);
 }
@@ -72,20 +68,35 @@ static void	init_cmd_struct(t_cmd *s_cmd, int ac, char **av)
 void	here_doc_to_pipe(t_cmd *s_cmd, char **av, char **envp)
 {
 	char	*line;
+	// int		fd_in;
+	int		tmp_fd;
 	int		i;
 
 	i = 0;
+
+	// TO set outide of fork
+	tmp_fd = open(".temp_here_doc", O_WRONLY | O_CREAT | O_APPEND);
+	// if (tmp_fd < 0)
+	// 	set error
+	// fd_in = dup(STDIN_FILENO);
 	line = get_next_line(STDIN_FILENO);
-	write(s_cmd->fd_in, line, ft_strlen(line));
-	while (!str_cmp(av[s_cmd->arg_index + 1], "here_doc"))
+	printf("line %s\n", line);
+	while (!str_cmp(av[s_cmd->arg_index], line))
 	{
+		printf("111\n");
+
+		write(1, "heredoc >", 9);
+		write(s_cmd->fd_in, line, ft_strlen(line));
 		free(line);
 		line = get_next_line(STDIN_FILENO);
-		write(s_cmd->fd_in, line, ft_strlen(line));
 	}
-	free(line);
+	// -----------------------------------//
 	if (dup2(s_cmd->pipe_[1], STDOUT_FILENO) == -1)
 			exit_if_failed_dup();
+
+
+
+
 	s_cmd->arg_index++;
 	s_cmd->cmd_path = get_command_path(av[s_cmd->arg_index], envp);
 	s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
@@ -100,6 +111,7 @@ void	fd_to_pipe(t_cmd *s_cmd, char **av, char **envp)
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{
 		close(s_cmd->pipe_[0]);
+		close(s_cmd->temp_pipe[0]);
 		if (s_cmd->fd_in == -1)
 		{
 			perror("Fd");
@@ -108,11 +120,11 @@ void	fd_to_pipe(t_cmd *s_cmd, char **av, char **envp)
 		if (dup2(s_cmd->fd_in, STDIN_FILENO) == -1)
 			exit_if_failed_dup();
 		close(s_cmd->fd_in);
-		if (dup2(s_cmd->pipe_[1], STDOUT_FILENO) == -1)
+		if (dup2(s_cmd->temp_pipe[1], STDOUT_FILENO) == -1)
 			exit_if_failed_dup();
 		s_cmd->cmd_path = get_command_path(av[s_cmd->arg_index], envp);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
-		close(s_cmd->pipe_[1]);
+		close(s_cmd->temp_pipe[1]);
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, envp);
 		perror("Execve");
 		exit(EXIT_FAILURE);
@@ -124,15 +136,15 @@ void	exec_process(t_cmd *s_cmd, char **av, char **envp)
 	exit_if_failed_fork(s_cmd);
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{
-		close(s_cmd->pipe_[1]);
-		close(s_cmd->fd_in);
+		// close(s_cmd->temp_pipe[1]);
+		// close(s_cmd->fd_in);
 		if (s_cmd->fd_out == -1)
 			exit(EXIT_FAILURE);
-		if (dup2(s_cmd->pipe_[0], STDIN_FILENO) == -1)
+		if (dup2(s_cmd->temp_pipe[0], STDIN_FILENO) == -1)
 			exit_if_failed_dup();
 		if (s_cmd->fork_count < (s_cmd->nb_cmd - 1))
 		{
-			if (dup2(s_cmd->fd_out, STDOUT_FILENO) == -1)
+			if (dup2(s_cmd->temp_pipe[1], STDOUT_FILENO) == -1)
 				exit_if_failed_dup();
 		}
 		else if (dup2(s_cmd->fd_out, STDOUT_FILENO) == -1)
@@ -140,7 +152,7 @@ void	exec_process(t_cmd *s_cmd, char **av, char **envp)
 		close(s_cmd->fd_out);
 		s_cmd->cmd_path = get_command_path(av[s_cmd->arg_index], envp);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
-		close(s_cmd->pipe_[0]);
+		close(s_cmd->temp_pipe[0]);
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, envp);
 		perror("Execve");
 		exit(EXIT_FAILURE);
@@ -204,13 +216,13 @@ int main(int ac, char **av, char **envp)
 		return (perror("Pipe"), 1);
 	if (s_cmd.here_doc)
 	{
-		s_cmd.fd_in = open(".here_doc.tmp", O_RDONLY);
-		s_cmd.fd_out = open(av[ac - 1], O_CREAT | O_RDWR | O_APPEND, 0644);
+		s_cmd.fd_in = open(".temp_here_doc", O_RDONLY);
+		s_cmd.fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	}
 	else
 	{
 		s_cmd.fd_in = open(av[s_cmd.arg_index], O_RDONLY);
-		s_cmd.fd_out = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+		s_cmd.fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	}
 
 	s_cmd.arg_index++;
@@ -229,7 +241,7 @@ int main(int ac, char **av, char **envp)
 			s_cmd.pid_arr[s_cmd.fork_count] = fork();
 			exec_process(&s_cmd, av, envp);
 		}
-		printf("%d < %d \n", s_cmd.fork_count, s_cmd.nb_cmd);
+		// printf("%d < %d \n", s_cmd.fork_count, s_cmd.nb_cmd);
 		s_cmd.arg_index++;
 		s_cmd.fork_count++;
 	}
