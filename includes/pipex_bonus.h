@@ -13,9 +13,13 @@
 #ifndef PIPEX_BONUS_H
 # define PIPEX_BONUS_H
 
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <sys/errno.h>
 
 # define CHILD_1 1
 # define CHILD_2 2
@@ -23,41 +27,37 @@
 
 typedef struct s_cmd
 {
+	pid_t	*pid_arr;
 	int		fd_in;
 	int		fd_out;
-
-
-	// try setting pipe into the structure 
-	int		pipe_[2];
-	int		temp_pipe[2];
-
-	char	*cmd_path;
-	
-	char	**cmd_options;
-	char	**env_p;
-	int		nb_cmd;
-
-	// index going through each arguments
-	int		arg_index;
-
-	// number of fork that are stored inside the pid array
-	int		fork_count;
-	pid_t	*pid_arr;
-
 	int		here_doc;
+	int		**pipe_arr;
+	int		pipe_here_doc[2];
+	int		nb_cmd;
+	int		arg_index;
+	int		fork_count;
+	char	*cmd_path;	
+	char	**cmd_options;
+	char	**envp;
 }	t_cmd;
 
 //                  PIPEX
-void	exit_if_less_than_5_args(int ac);
-char	*get_command_path(char *av, char **envp);
+char	*get_command_path(t_cmd *s_cmd, char *av);
+void	exit_if_not_enough_args(int ac, char **av);
+// void	var_init(t_cmd *s_cmd, int ac, char **av, char **envp);
+void	fd_in_init(t_cmd *s_cmd, char **av);
+void	fd_out_init(t_cmd *s_cmd, int ac, char **av);
+void	pipe_arr_init(t_cmd *s_cmd);
+void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp);
+void	set_here_doc(t_cmd *s_cmd, char **av);
 
 //                  UTILS
 size_t	ft_strlen(char *str);
+int		str_cmp(char *s1, char *s2);
 char	**ft_split(char *str, char c);
-
-//                  PATH PARSING
 char	*path_str(char *full_path);
 char	*ft_strnstr(char *full_path, const char *s2, size_t n);
+
 
 //                  ERROR
 void	exit_if_failed_dup(void);
@@ -67,6 +67,8 @@ void	exit_if_failed_fork(t_cmd *s_cmd);
 void	free_cmd_line(t_cmd *s_cmd);
 void	free_double_tab(char **tab);
 void	free_struct(t_cmd *s_cmd);
+void	free_pipe_arr(t_cmd *s_cmd, int i);
+
 
 //					GET NEXT LINE
 char	*get_next_line(int fd);

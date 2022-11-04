@@ -12,11 +12,16 @@
 
 #include "../../includes/pipex_bonus.h"
 
-void	exit_if_less_than_5_args(int ac)
+void	exit_if_not_enough_args(int ac, char **av)
 {
-	if (ac < 5)
+	if (str_cmp(av[1], "here_doc") && (ac < 6))
 	{
-		write(1, "at least 5 arguments are required\n", 34);
+			write(2, "at least 6 arguments are required\n", 34);
+			exit(EXIT_FAILURE);
+	}
+	else if (ac < 5)
+	{
+		write(2, "at least 5 arguments are required\n", 34);
 		exit(EXIT_FAILURE);
 	}
 }

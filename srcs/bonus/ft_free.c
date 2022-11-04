@@ -25,14 +25,17 @@ void	free_double_tab(char **tab)
 	free(tab);
 }
 
-void	free_cmd_line(t_cmd *s_cmd)
+void	free_pipe_arr(t_cmd *s_cmd, int i)
 {
-	printf("11111 %s\n", s_cmd->cmd_path);
-	free(s_cmd->cmd_path);
-	printf("2222 %s\n", s_cmd->cmd_options[0]);
-	free_double_tab(s_cmd->cmd_options);
+	while (i)
+	{
+		free(s_cmd->pipe_arr[i - 1]);
+		i--;
+	}
+	if (!s_cmd->here_doc)
+		close(s_cmd->fd_in);
+	exit(EXIT_FAILURE);
 }
-
 
 // void	free_struct(t_cmd *s_cmd)
 // {

@@ -55,15 +55,15 @@ char	*path_str(char *full_path)
 	return (path);
 }
 
-static char	*cmd_env_path_line(char **envp)
+static char	*cmd_env_path_line(t_cmd *s_cmd)
 {
 	char	*path_env;
 	int		i;
 
 	i = 0;
-	while (envp[i])
+	while (s_cmd->envp[i])
 	{
-		path_env = ft_strnstr(envp[i], "PATH=", 5);
+		path_env = ft_strnstr(s_cmd->envp[i], "PATH=", 5);
 		if (path_env)
 			return (path_env);
 		i++;
@@ -71,7 +71,7 @@ static char	*cmd_env_path_line(char **envp)
 	exit(EXIT_FAILURE);
 }
 
-char	*get_command_path(char *av, char **envp)
+char	*get_command_path(t_cmd *s_cmd, char *av)
 {
 	char	**segmented_path;
 	char	*command_path;
@@ -79,7 +79,7 @@ char	*get_command_path(char *av, char **envp)
 	char	**cmd;
 	int		i;
 
-	path_env = cmd_env_path_line(envp);
+	path_env = cmd_env_path_line(s_cmd);
 	segmented_path = ft_split(path_env, ':');
 	free(path_env);
 	cmd = ft_split(av, ' ');
