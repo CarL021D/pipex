@@ -2,11 +2,12 @@
 
 void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 {
-	if (str_cmp(av[1], "here_doc"))
+	if (ft_strcmp(av[1], "here_doc"))
 	{
 		s_cmd->here_doc = 1;
 		s_cmd->nb_cmd = ac - 4;
 		s_cmd->arg_index = 3;
+
 	}
 	else
 	{
@@ -14,8 +15,15 @@ void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 		s_cmd->nb_cmd = ac - 3;
 		s_cmd->arg_index = 2;
 	}
+	s_cmd->arg_index = 2;
 	s_cmd->envp = envp;
 	s_cmd->fork_count = 0;
+	s_cmd->pid_arr = malloc(sizeof(pid_t) * s_cmd->nb_cmd);
+	if (!s_cmd->pid_arr)
+	{
+		free(s_cmd->pid_arr);
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	fd_in_init(t_cmd *s_cmd, char **av)
@@ -51,6 +59,7 @@ void	pipe_arr_init(t_cmd *s_cmd)
 		s_cmd->pipe_arr[i] = malloc(sizeof(int) * 2);
 		if (!s_cmd->pipe_arr[i])
 			free_pipe_arr(s_cmd, i);
+		// TODO: - free pid_arr
 	}
 	i = -1;
 	while (++i < nb_pipe)
@@ -59,22 +68,52 @@ void	pipe_arr_init(t_cmd *s_cmd)
 		{
 			perror("Pipe");
 			free_pipe_arr(s_cmd, nb_pipe);
+			// FREE 
 		}
 	}
 }
+
+// int	strncmp(const char *s1, const char *s2, size_t n)
+// {
+// 	char			*str1;
+// 	char			*str2;
+// 	unsigned int	i;
+
+// 	str1 = (char *)s1;
+// 	str2 = (char *)s2;
+// 	printf("%s\n", str2);
+// 	i = 0;
+// 	if (n == 0)
+// 		return (0);
+// 	while ((str1[i] || str2[i]) && str1[i] == str2[i] && i < n - 1)
+// 		i++;
+
+// 	return ((unsigned char)str1[i] - (unsigned char)str2[i]);
+// }
+
 void	set_here_doc(t_cmd *s_cmd, char **av)
 {
 	char	*line;
+	char	*delimeter;
 
+	if (pipe(s_cmd->pipe_here_doc) == -1)
+	{
+		perror("Pipe");
+		exit(EXIT_FAILURE);
+	}
+	delimeter = ft_strjoin(av[s_cmd->arg_index], "\n");
 	while (1)
 	{
-		write(1, "heredoc >", 9);
+		write(1, "heredoc> ", 9);
 		line = get_next_line(STDIN_FILENO);
-		if (!line || str_cmp(line, av[s_cmd->arg_index]))
+		if (!line || ft_strcmp(line, delimeter))
 			break;
 		write(s_cmd->pipe_here_doc[1], line, ft_strlen(line));
 		free(line);
 	}
-	free(line);
+	// free(line);
+	s_cmd->fd_in = s_cmd->pipe_here_doc[1];
 	close(s_cmd->pipe_here_doc[1]);
+	free(delimeter);
+	s_cmd->arg_index++;
 }

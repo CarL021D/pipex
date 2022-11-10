@@ -20,6 +20,7 @@ SRCS	= 		srcs/pipex.c 				\
 				srcs/error_handler.c		\
 				
 SRCS_B =		srcs/bonus/pipex.c					\
+				srcs/bonus/process_exec.c			\
 				srcs/bonus/ft_split.c				\
 				srcs/bonus/get_cmd_path.c			\
 				srcs/bonus/utils.c					\

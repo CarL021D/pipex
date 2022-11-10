@@ -37,25 +37,6 @@ size_t	ft_create_len(char *str, unsigned int start, size_t len)
 	return (count);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*str;
-	size_t	i;
-	size_t	l;
-
-	if (!s)
-		return (NULL);
-	l = ft_create_len((char *)s, start, len);
-	str = malloc(sizeof(char) * (l + 1));
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (l--)
-		str[i++] = (char)s[start++];
-	str[i] = '\0';
-	return (str);
-}
-
 char	*ft_strnstr(char *full_path, const char *s2, size_t n)
 {
 	char	*path;

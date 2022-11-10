@@ -51,12 +51,19 @@ void	pipe_arr_init(t_cmd *s_cmd);
 void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp);
 void	set_here_doc(t_cmd *s_cmd, char **av);
 
+//					PROCESS EXEC
+void	fd_to_pipe_exec(t_cmd *s_cmd, char **av);
+void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av);
+void	pipe_to_pipe_exec(t_cmd *s_cmd, char **av);
+void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac);
+
 //                  UTILS
 size_t	ft_strlen(char *str);
-int		str_cmp(char *s1, char *s2);
 char	**ft_split(char *str, char c);
+char	*ft_strjoin(char const *s1, char const *s2);
 char	*path_str(char *full_path);
 char	*ft_strnstr(char *full_path, const char *s2, size_t n);
+int		ft_strcmp(char *s1, char *s2);
 
 
 //                  ERROR
@@ -72,7 +79,5 @@ void	free_pipe_arr(t_cmd *s_cmd, int i);
 
 //					GET NEXT LINE
 char	*get_next_line(int fd);
-char	*ft_strjoin(char *s1, char *buffer);
-int		still_on_line(char *stash);
 
 #endif

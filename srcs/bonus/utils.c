@@ -16,13 +16,15 @@ size_t	ft_strlen(char *str)
 {
 	int		i;
 
+    if (!str)
+    	return (0);
 	i = 0;
 	while (str[i])
 		i++;
 	return (i);
 }
 
-int	str_cmp(char *s1, char *s2)
+int	ft_strcmp(char *s1, char *s2)
 {
 	int				i;
 
@@ -49,25 +51,6 @@ size_t	ft_create_len(char *str, unsigned int start, size_t len)
 	return (count);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*str;
-	size_t	i;
-	size_t	l;
-
-	if (!s)
-		return (NULL);
-	l = ft_create_len((char *)s, start, len);
-	str = malloc(sizeof(char) * (l + 1));
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (l--)
-		str[i++] = (char)s[start++];
-	str[i] = '\0';
-	return (str);
-}
-
 char	*ft_strnstr(char *full_path, const char *s2, size_t n)
 {
 	char	*path;
@@ -90,4 +73,29 @@ char	*ft_strnstr(char *full_path, const char *s2, size_t n)
 		i++;
 	}
 	return (NULL);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*str;
+	size_t	l_s1;
+	size_t	l_s2;
+	size_t	i;
+	size_t	j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	l_s1 = ft_strlen((char *)s1);
+	l_s2 = ft_strlen((char *)s2);
+	str = malloc(sizeof(char) * (l_s1 + l_s2 + 1));
+	if (!str)
+		return (NULL);
+	i = -1;
+	j = -1;
+	while (++i < l_s1)
+		str[i] = (char)s1[i];
+	while (++j < l_s2)
+		str[i++] = (char)s2[j];
+	str[i] = '\0';
+	return (str);
 }

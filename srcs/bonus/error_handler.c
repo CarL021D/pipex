@@ -14,7 +14,7 @@
 
 void	exit_if_not_enough_args(int ac, char **av)
 {
-	if (str_cmp(av[1], "here_doc") && (ac < 6))
+	if (ft_strcmp(av[1], "here_doc") && (ac < 6))
 	{
 			write(2, "at least 6 arguments are required\n", 34);
 			exit(EXIT_FAILURE);

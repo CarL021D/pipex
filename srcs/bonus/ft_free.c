@@ -34,6 +34,7 @@ void	free_pipe_arr(t_cmd *s_cmd, int i)
 	}
 	if (!s_cmd->here_doc)
 		close(s_cmd->fd_in);
+	free(s_cmd->pid_arr);
 	exit(EXIT_FAILURE);
 }
 

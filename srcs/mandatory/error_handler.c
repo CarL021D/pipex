@@ -16,7 +16,7 @@ void	exit_if_not_5_args(int ac)
 {
 	if (ac != 5)
 	{
-		write(1, "5 arguments are required\n", 26);
+		write(2, "5 arguments are required\n", 26);
 		exit(EXIT_FAILURE);
 	}
 }

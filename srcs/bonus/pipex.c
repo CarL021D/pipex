@@ -18,108 +18,8 @@ void	var_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 {
 	cmd_struct_init(s_cmd, ac, av, envp);
 	pipe_arr_init(s_cmd);
-}
-
-void	fd_to_pipe_exec(t_cmd *s_cmd, char **av)
-{
-	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
-	{
-		fd_in_init(s_cmd, av);
-		// close(s_cmd->pipe_arr[0][0]);
-		if (s_cmd->fd_in == -1)
-		{
-			perror("Fd");
-			exit(EXIT_FAILURE);
-		}
-		if (dup2(s_cmd->fd_in, STDIN_FILENO) == -1)
-			exit_if_failed_dup();
-		close(s_cmd->fd_in);
-		if (dup2(s_cmd->pipe_arr[0][1], STDOUT_FILENO) == -1)
-			exit_if_failed_dup();
-		close(s_cmd->pipe_arr[0][1]);
-		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
-		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
-
-		write(2, "111\n", 4);
-		
-		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
-		perror("Execve");
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av)
-{
-	exit_if_failed_fork(s_cmd);
-	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
-	{
+	if (s_cmd->here_doc)
 		set_here_doc(s_cmd, av);
-		close(s_cmd->pipe_here_doc[0]);
-		if (s_cmd->fd_in == -1)
-		{
-			perror("Fd");
-			exit(EXIT_FAILURE);
-		}
-		if (dup2(s_cmd->pipe_here_doc[0], STDIN_FILENO) == -1)
-			exit_if_failed_dup();
-		close(s_cmd->fd_in);
-		if (dup2(s_cmd->pipe_arr[0][1], STDOUT_FILENO) == -1)
-			exit_if_failed_dup();
-		close(s_cmd->pipe_here_doc[0]);
-		close(s_cmd->pipe_arr[0][1]);
-		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
-		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
-		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
-		perror("Execve");
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	pipe_to_pipe_exec(t_cmd *s_cmd, char **av)
-{
-	exit_if_failed_fork(s_cmd);
-	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
-	{
-		close(s_cmd->pipe_arr[s_cmd->fork_count - 1][1]);
-		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count - 1][0], STDIN_FILENO) == -1)
-			exit_if_failed_dup();
-		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count][1], STDOUT_FILENO) == -1)
-			exit_if_failed_dup();
-		close(s_cmd->pipe_arr[s_cmd->fork_count - 1][0]);
-		close(s_cmd->pipe_arr[s_cmd->fork_count][0]);
-		close(s_cmd->pipe_arr[s_cmd->fork_count][1]);
-		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
-		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
-		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
-		perror("Execve");
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac)
-{
-	exit_if_failed_fork(s_cmd);
-	fd_out_init(s_cmd, ac, av);
-	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
-	{
-		close(s_cmd->pipe_arr[s_cmd->fork_count - 1][1]);
-		if (s_cmd->fd_out == -1)
-			exit(EXIT_FAILURE);
-		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count - 1][0], STDIN_FILENO) == -1)
-			exit_if_failed_dup();
-		if (dup2(s_cmd->fd_out, STDOUT_FILENO) == -1)
-			exit_if_failed_dup();
-		close(s_cmd->pipe_arr[s_cmd->fork_count - 1][0]);
-		close(s_cmd->fd_out);
-		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
-		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
-
-	write(2, "333\n", 4);
-
-		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
-		perror("Execve");
-		exit(EXIT_FAILURE);
-	}
 }
 
 void	wait_for_child_process(t_cmd *s_cmd)
@@ -146,27 +46,22 @@ void	exec_parent_process(t_cmd *s_cmd)
 
 void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 {
-	// if (s_cmd->fork_count == (s_cmd->nb_cmd - 1))
-	// 	fd_out_init(s_cmd);
 	s_cmd->pid_arr[s_cmd->fork_count] = fork();
-	
-
+	exit_if_failed_fork(s_cmd);
 	if (s_cmd->fork_count == 0)
 	{
-		write(2, "FFF\n", 4);
 		if (s_cmd->here_doc)
 			here_doc_to_pipe_exec(s_cmd, av);
 		else
 			fd_to_pipe_exec(s_cmd, av);
 	}
-	else if (s_cmd->fork_count < (s_cmd->nb_cmd - 1))
-		pipe_to_pipe_exec(s_cmd, av);
-	else
+	else if (s_cmd->fork_count == (s_cmd->nb_cmd - 1))
 	{
-		write(2, "GGG\n", 4);
-		
+		fd_out_init(s_cmd, ac , av);
 		pipe_to_fd_exec(s_cmd, av, ac);
-	}
+	}	
+	else
+		pipe_to_pipe_exec(s_cmd, av);
 }
 
 int main(int ac, char **av, char **envp)
@@ -174,15 +69,14 @@ int main(int ac, char **av, char **envp)
 	t_cmd	s_cmd;
 
 	exit_if_not_enough_args(ac, av);
-	cmd_struct_init(&s_cmd, ac, av, envp);
-	pipe_arr_init(&s_cmd);
+	var_init(&s_cmd, ac, av, envp);
 	while (s_cmd.fork_count < s_cmd.nb_cmd)
 	{
 		exec_child_process(&s_cmd, av, ac);
 		s_cmd.fork_count++;
 		s_cmd.arg_index++;
 	}
-	exec_parent_process(&s_cmd);
+	// exec_parent_process(&s_cmd);
 }
 
 
