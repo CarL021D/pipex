@@ -34,15 +34,16 @@ void	wait_for_child_process(t_cmd *s_cmd)
 	}
 }
 
-void	exec_parent_process(t_cmd *s_cmd)
-{
-	// close(s_cmd->fd_in);
-	// close(s_cmd->fd_out);
-	// close(s_cmd->pipe_[0]);
-	// close(s_cmd->pipe_[1]);
-	// free_struct(s_cmd);
-	wait_for_child_process(s_cmd);
-}
+// void	exec_parent_process(t_cmd *s_cmd)
+// {
+// 	// close(s_cmd->fd_in);
+// 	// close(s_cmd->fd_out);
+// 	// close(s_cmd->pipe_[0]);
+// 	// close(s_cmd->pipe_[1]);
+// 	// free_struct(s_cmd);
+// 	// wait_for_child_process(s_cmd);
+// 	// waitpid(s_cmd->pid_arr[s_cmd->fork_count], NULL, 0);
+// }
 
 void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 {
@@ -78,47 +79,3 @@ int main(int ac, char **av, char **envp)
 	}
 	// exec_parent_process(&s_cmd);
 }
-
-
-
-
-
-
-
-// int main(int ac, char **av, char **envp)
-// {
-// 	t_cmd	s_cmd;
-
-// 	exit_if_not_enough_args(ac, av);
-// 	init_cmd_struct(&s_cmd, ac, av);
-// 	if (pipe(s_cmd.pipe_) == -1)
-// 		return (perror("Pipe"), 1);
-// 	if (s_cmd.here_doc)
-// 		s_cmd.fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-// 	else
-// 	{
-// 		s_cmd.fd_in = open(av[s_cmd.arg_index], O_RDONLY);
-// 		s_cmd.fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	}
-
-// 	s_cmd.arg_index++;
-// 	while (s_cmd.fork_count < s_cmd.nb_cmd)
-// 	{
-// 		if (s_cmd.fork_count == 0)
-// 		{
-// 			s_cmd.pid_arr[s_cmd.fork_count] = fork();
-// 			if (s_cmd.here_doc)
-// 				here_doc_to_pipe(&s_cmd, av, envp);
-// 			else
-// 				fd_to_pipe(&s_cmd, av, envp);		
-// 		}	
-// 		else
-// 		{
-// 			s_cmd.pid_arr[s_cmd.fork_count] = fork();
-// 			exec_process(&s_cmd, av, envp);
-// 		}
-// 		s_cmd.arg_index++;
-// 		s_cmd.fork_count++;
-// 	}
-// 	exec_parent_process(&s_cmd);
-// }

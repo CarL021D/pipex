@@ -65,7 +65,6 @@ static void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 		// Added lign 66
 		s_cmd->fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		close(pipe_[1]);
-		close(s_cmd->fd_in);
 		if (s_cmd->fd_out == -1)
 			exit(EXIT_FAILURE);
 		if (dup2(pipe_[0], STDIN_FILENO) == -1)
