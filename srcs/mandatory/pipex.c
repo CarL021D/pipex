@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 08:03:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/24 16:01:04 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/14 00:27:06 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,14 @@ static void	child_1_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 {
 	if (s_cmd->pid_1 == 0)
 	{
-		// Added lign 40
 		s_cmd->fd_in = open(av[1], O_RDONLY);
+		exit_if_failed_fd_open(s_cmd);
 		close(pipe_[0]);
-		if (s_cmd->fd_in == -1)
-		{
-			perror("Fd");
-			exit(EXIT_FAILURE);
-		}
 		if (dup2(s_cmd->fd_in, STDIN_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_if_failed_dup(s_cmd);
 		close(s_cmd->fd_in);
 		if (dup2(pipe_[1], STDOUT_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_if_failed_dup(s_cmd);
 		s_cmd->cmd1_path = get_command_path(av[2], envp);
 		s_cmd->cmd1_options = ft_split(av[2], ' ');
 		close(pipe_[1]);
@@ -56,22 +51,18 @@ static void	child_1_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 		perror("Execve");
 		exit(EXIT_FAILURE);
 	}
-	waitpid(s_cmd->pid_1, NULL, 0);
 }
 
 static void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 {
 	if (s_cmd->pid_2 == 0)
-	{
-		// Added lign 66
-		s_cmd->fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	{		s_cmd->fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		exit_if_failed_fd_open(s_cmd);
 		close(pipe_[1]);
-		if (s_cmd->fd_out == -1)
-			exit(EXIT_FAILURE);
 		if (dup2(pipe_[0], STDIN_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_if_failed_dup(s_cmd);
 		if (dup2(s_cmd->fd_out, STDOUT_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_if_failed_dup(s_cmd);
 		close(s_cmd->fd_out);
 		s_cmd->cmd2_path = get_command_path(av[3], envp);
 		s_cmd->cmd2_options = ft_split(av[3], ' ');
@@ -80,7 +71,6 @@ static void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 		perror("Execve");
 		exit(EXIT_FAILURE);
 	}
-	waitpid(s_cmd->pid_2, NULL, 0);
 }
 
 static void	exec_parent_process(t_cmd *s_cmd, int *pipe_)
@@ -90,8 +80,8 @@ static void	exec_parent_process(t_cmd *s_cmd, int *pipe_)
 	close(pipe_[0]);
 	close(pipe_[1]);
 	free_struct(s_cmd);
-	// waitpid(s_cmd->pid_1, NULL, 0);
-	// waitpid(s_cmd->pid_2, NULL, 0);
+	waitpid(s_cmd->pid_1, NULL, 0);
+	waitpid(s_cmd->pid_2, NULL, 0);
 }
 
 int	main(int ac, char **av, char **envp)

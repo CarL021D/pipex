@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/20 17:08:55 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/14 00:22:18 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,28 @@ void	exit_if_not_5_args(int ac)
 	}
 }
 
-void	exit_if_failed_dup(void)
+void	exit_if_failed_fd_open(t_cmd *s_cmd)
 {
-	perror("Dup2");
+	if (s_cmd->fd_in == -1)
+	{
+		perror("Open");
+		
+		exit(EXIT_FAILURE);
+	}
+	if (s_cmd->fd_out == -1)
+	{
+		perror("Open");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void	exit_if_failed_dup(t_cmd *s_cmd)
+{
+	if (s_cmd->fd_in)
+		close(s_cmd->fd_in);
+	if (s_cmd->fd_out)
+		close(s_cmd->fd_out);
+	perror("Dup2");	
 	exit(EXIT_FAILURE);
 }
 

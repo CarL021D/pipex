@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/20 17:07:12 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/14 00:24:54 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,24 @@ typedef struct s_cmd
 	char	**cmd2_options;
 }	t_cmd;
 
-//                  PIPEX
+//					PIPEX
 void	exit_if_not_5_args(int ac);
 char	*get_command_path(char *av, char **envp);
 
-//                  UTILS
+//					UTILS
 size_t	ft_strlen(char *str);
 char	**ft_split(char *str, char c);
 
-//                  PATH PARSING
+//					PATH PARSING
 char	*path_str(char *full_path);
 char	*ft_strnstr(char *full_path, const char *s2, size_t n);
 
-//                  ERROR
-void	exit_if_failed_dup(void);
+//					ERROR
+void	exit_if_failed_fd_open(t_cmd *s_cmd);
+void	exit_if_failed_dup(t_cmd *s_cmd);
 void	exit_if_failed_fork(t_cmd *s_cmd, int child);
 
-//                  FREE
+//					FREE
 void	free_double_tab(char **tab);
 void	free_struct(t_cmd *s_cmd);
 

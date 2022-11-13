@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/13 23:48:04 by caboudar          #+#    #+#             */
+/*   Updated: 2022/11/14 00:40:07 by caboudar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/pipex_bonus.h"
 
 void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp)
@@ -15,10 +27,10 @@ void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 	s_cmd->arg_index = 2;
 	s_cmd->envp = envp;
 	s_cmd->fork_count = 0;
-	if (pipe(s_cmd->pipe_) == -1)
-		return ;
-	if (pipe(s_cmd->temp_pipe))
-		return ;
+	// if (pipe(s_cmd->pipe_) == -1)
+	// 	return ;
+	// if (pipe(s_cmd->temp_pipe))
+	// 	return ;
 	// TODO: - Free method to add
 	s_cmd->pid_arr = malloc(sizeof(pid_t) * s_cmd->nb_cmd);
 	if (!s_cmd->pid_arr)

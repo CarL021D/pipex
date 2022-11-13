@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path_parsing_utils.c                               :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 01:34:04 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/20 16:11:15 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/13 23:52:22 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ size_t	ft_strlen(char *str)
 {
 	int		i;
 
-    if (!str)
-    	return (0);
+	if (!str)
+	{
+		return (0);
+	}
 	i = 0;
 	while (str[i])
 		i++;
@@ -26,7 +28,7 @@ size_t	ft_strlen(char *str)
 
 int	ft_strcmp(char *s1, char *s2)
 {
-	int				i;
+	int		i;
 
 	i = 0;
 	while ((s1[i] || s2[i]) && s1[i] == s2[i])

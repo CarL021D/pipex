@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/24 18:27:23 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/13 23:54:29 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	exit_if_failed_fork(t_cmd *s_cmd);
 void	free_cmd_line(t_cmd *s_cmd);
 void	free_double_tab(char **tab);
 void	free_struct(t_cmd *s_cmd);
-void	free_pipe_arr(t_cmd *s_cmd);
+void	free_pipe_arr(t_cmd *s_cmd, int i);
 
 
 //					GET NEXT LINE

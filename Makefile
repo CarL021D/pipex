@@ -6,18 +6,18 @@
 #    By: caboudar <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/24 15:12:48 by caboudar          #+#    #+#              #
-#    Updated: 2022/10/24 16:30:58 by caboudar         ###   ########.fr        #
+#    Updated: 2022/11/13 23:43:41 by caboudar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 
-SRCS	= 		srcs/pipex.c 				\
-				srcs/ft_split.c				\
-				srcs/get_cmd_path.c 		\
-				srcs/path_parsing_utils.c	\
-				srcs/ft_free.c				\
-				srcs/error_handler.c		\
+SRCS	= 		srcs/mandatory/pipex.c 					\
+				srcs/mandatory/ft_split.c				\
+				srcs/mandatory/get_cmd_path.c			\
+				srcs/mandatory/path_parsing_utils.c		\
+				srcs/mandatory/ft_free.c				\
+				srcs/mandatory/error_handler.c			\
 				
 SRCS_B =		srcs/bonus/pipex.c					\
 				srcs/bonus/process_exec.c			\
