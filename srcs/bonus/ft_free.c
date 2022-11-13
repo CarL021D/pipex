@@ -29,7 +29,7 @@ void	free_pipe_arr(t_cmd *s_cmd, int i)
 {
 	while (i)
 	{
-		free(s_cmd->pipe_arr[i - 1]);
+		free(s_cmd->pipe_arr[i]);
 		i--;
 	}
 	if (!s_cmd->here_doc)

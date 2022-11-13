@@ -56,6 +56,7 @@ static void	child_1_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 		perror("Execve");
 		exit(EXIT_FAILURE);
 	}
+	waitpid(s_cmd->pid_1, NULL, 0);
 }
 
 static void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
@@ -79,6 +80,7 @@ static void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 		perror("Execve");
 		exit(EXIT_FAILURE);
 	}
+	waitpid(s_cmd->pid_2, NULL, 0);
 }
 
 static void	exec_parent_process(t_cmd *s_cmd, int *pipe_)
@@ -88,8 +90,8 @@ static void	exec_parent_process(t_cmd *s_cmd, int *pipe_)
 	close(pipe_[0]);
 	close(pipe_[1]);
 	free_struct(s_cmd);
-	waitpid(s_cmd->pid_1, NULL, 0);
-	waitpid(s_cmd->pid_2, NULL, 0);
+	// waitpid(s_cmd->pid_1, NULL, 0);
+	// waitpid(s_cmd->pid_2, NULL, 0);
 }
 
 int	main(int ac, char **av, char **envp)

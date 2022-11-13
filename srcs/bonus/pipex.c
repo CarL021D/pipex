@@ -74,8 +74,10 @@ int main(int ac, char **av, char **envp)
 	while (s_cmd.fork_count < s_cmd.nb_cmd)
 	{
 		exec_child_process(&s_cmd, av, ac);
+		// waitpid(s_cmd.pid_arr[s_cmd.fork_count], NULL, 0);
 		s_cmd.fork_count++;
 		s_cmd.arg_index++;
 	}
+	// waitpid(s_cmd.pid_arr[0], NULL, 0);
 	// exec_parent_process(&s_cmd);
 }

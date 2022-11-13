@@ -6,18 +6,20 @@ void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 	{
 		s_cmd->here_doc = 1;
 		s_cmd->nb_cmd = ac - 4;
-		s_cmd->arg_index = 3;
-
 	}
 	else
 	{
 		s_cmd->here_doc = 0;
 		s_cmd->nb_cmd = ac - 3;
-		s_cmd->arg_index = 2;
 	}
 	s_cmd->arg_index = 2;
 	s_cmd->envp = envp;
 	s_cmd->fork_count = 0;
+	if (pipe(s_cmd->pipe_) == -1)
+		return ;
+	if (pipe(s_cmd->temp_pipe))
+		return ;
+	// TODO: - Free method to add
 	s_cmd->pid_arr = malloc(sizeof(pid_t) * s_cmd->nb_cmd);
 	if (!s_cmd->pid_arr)
 	{
@@ -72,24 +74,6 @@ void	pipe_arr_init(t_cmd *s_cmd)
 		}
 	}
 }
-
-// int	strncmp(const char *s1, const char *s2, size_t n)
-// {
-// 	char			*str1;
-// 	char			*str2;
-// 	unsigned int	i;
-
-// 	str1 = (char *)s1;
-// 	str2 = (char *)s2;
-// 	printf("%s\n", str2);
-// 	i = 0;
-// 	if (n == 0)
-// 		return (0);
-// 	while ((str1[i] || str2[i]) && str1[i] == str2[i] && i < n - 1)
-// 		i++;
-
-// 	return ((unsigned char)str1[i] - (unsigned char)str2[i]);
-// }
 
 void	set_here_doc(t_cmd *s_cmd, char **av)
 {

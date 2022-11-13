@@ -33,6 +33,8 @@ typedef struct s_cmd
 	int		here_doc;
 	int		**pipe_arr;
 	int		pipe_here_doc[2];
+	// int		pipe_[2];
+	// int		temp_pipe[2];
 	int		nb_cmd;
 	int		arg_index;
 	int		fork_count;
@@ -74,7 +76,7 @@ void	exit_if_failed_fork(t_cmd *s_cmd);
 void	free_cmd_line(t_cmd *s_cmd);
 void	free_double_tab(char **tab);
 void	free_struct(t_cmd *s_cmd);
-void	free_pipe_arr(t_cmd *s_cmd, int i);
+void	free_pipe_arr(t_cmd *s_cmd);
 
 
 //					GET NEXT LINE
