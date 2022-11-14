@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:04 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/14 00:40:07 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/14 01:53:33 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ void	fd_out_init(t_cmd *s_cmd, int ac, char **av)
 		s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+
+	// "TODO"
 }
 
 void	pipe_arr_init(t_cmd *s_cmd)
