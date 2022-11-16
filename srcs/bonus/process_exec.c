@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:47:31 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/14 01:34:28 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/16 03:02:22 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@ void	fd_to_pipe_exec(t_cmd *s_cmd, char **av)
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{
 		fd_in_init(s_cmd, av);
-		close(s_cmd->pipe_arr[s_cmd->fork_count][0]);
+		// close(s_cmd->pipe_arr[s_cmd->fork_count][0]);
 		if (dup2(s_cmd->fd_in, STDIN_FILENO) == -1)
 			exit_if_failed_dup();
-		close(s_cmd->fd_in);
+		// close(s_cmd->fd_in);
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count][1], STDOUT_FILENO) == -1)
 			exit_if_failed_dup();
-		close(s_cmd->pipe_arr[s_cmd->fork_count][1]);
+		for (int x = 2; x < 20; x++)
+			close(x);
+		// close(s_cmd->pipe_arr[s_cmd->fork_count][1]);
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');		
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
@@ -38,7 +40,7 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av)
 {
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{
-		close(s_cmd->pipe_arr[s_cmd->fork_count][0]);
+		// close(s_cmd->pipe_arr[s_cmd->fork_count][0]);
 		if (s_cmd->fd_in == -1)
 		{
 			perror("Fd");
@@ -49,11 +51,15 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av)
 			write(2, "errorP\n", 7);
 			exit_if_failed_dup();
 		}
-		close(s_cmd->fd_in);
+		// close(s_cmd->fd_in);
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count][1], STDOUT_FILENO) == -1)
 			exit_if_failed_dup();
-		close(s_cmd->pipe_here_doc[0]);
-		close(s_cmd->pipe_arr[s_cmd->fork_count][1]);
+			
+		for (int x = 2; x < 20; x++)
+			close(x);
+			
+		// close(s_cmd->pipe_here_doc[0]);
+		// close(s_cmd->pipe_arr[s_cmd->fork_count][1]);
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
@@ -68,14 +74,20 @@ void	pipe_to_pipe_exec(t_cmd *s_cmd, char **av)
 {
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{
-		close(s_cmd->pipe_arr[s_cmd->fork_count - 1][1]);
+		// close(s_cmd->pipe_arr[s_cmd->fork_count - 1][1]);
+
+
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count - 1][0], STDIN_FILENO) == -1)
 			exit_if_failed_dup();
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count][1], STDOUT_FILENO) == -1)
 			exit_if_failed_dup();
-		 close(s_cmd->pipe_arr[s_cmd->fork_count - 1][0]);
-		 close(s_cmd->pipe_arr[s_cmd->fork_count][0]);
-		 close(s_cmd->pipe_arr[s_cmd->fork_count][1]);
+
+		for (int x = 2; x < 20; x++)
+			close(x);
+			
+		//  close(s_cmd->pipe_arr[s_cmd->fork_count - 1][0]);
+		//  close(s_cmd->pipe_arr[s_cmd->fork_count][0]);
+		//  close(s_cmd->pipe_arr[s_cmd->fork_count][1]);
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
@@ -90,16 +102,17 @@ void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac)
 	fd_out_init(s_cmd, ac, av);
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{
-		 close(s_cmd->pipe_arr[s_cmd->fork_count - 1][1]);
+		//  close(s_cmd->pipe_arr[s_cmd->fork_count - 1][1]);
 		
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count - 1][0], STDIN_FILENO) == -1)
 			exit_if_failed_dup();
 		if (dup2(s_cmd->fd_out, STDOUT_FILENO) == -1)
 			exit_if_failed_dup();
 			
-		 close(s_cmd->pipe_arr[s_cmd->fork_count - 1][0]);
-		 close(s_cmd->fd_out);
-		
+		//  close(s_cmd->pipe_arr[s_cmd->fork_count - 1][0]);
+		//  close(s_cmd->fd_out);
+		for (int x = 2; x < 20; x++)
+			close(x);
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
@@ -115,14 +128,12 @@ void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac)
 
 
 
-
-
 // void	fd_to_pipe_exec(t_cmd *s_cmd, char **av)
 // {
 // 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 // 	{
 // 		fd_in_init(s_cmd, av);
-// 		close(s_cmd->pipe_[0]);
+//		close(s_cmd->pipe_[0]);
 // 		if (s_cmd->fd_in == -1)
 // 		{
 // 			perror("Fd");
