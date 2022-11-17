@@ -23,25 +23,23 @@ void	var_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 void	wait_for_child_process(t_cmd *s_cmd)
 {
 	int		i;
+	int		ret;
 
 	i = 0;
-	while (i < s_cmd->fork_count)
+	while (i < s_cmd->nb_cmd)
 	{
-		waitpid(s_cmd->pid_arr[i], NULL, 0);
+		waitpid(s_cmd->pid_arr[i], &ret, 0);
 		i++;
 	}
 }
 
-// void	exec_parent_process(t_cmd *s_cmd)
-// {
-// 	// close(s_cmd->fd_in);
-// 	// close(s_cmd->fd_out);
-// 	// close(s_cmd->pipe_[0]);
-// 	// close(s_cmd->pipe_[1]);
-// 	// free_struct(s_cmd);
-// 	// wait_for_child_process(s_cmd);
-// 	// waitpid(s_cmd->pid_arr[s_cmd->fork_count], NULL, 0);
-// }
+void	exec_parent_process(t_cmd *s_cmd)
+{
+	// free_struct(s_cmd);
+	close_fds(s_cmd, -1);
+	wait_for_child_process(s_cmd);
+	// waitpid(s_cmd->pid_arr[s_cmd->fork_count], NULL, 0);
+}
 
 void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 {
@@ -74,7 +72,6 @@ int main(int ac, char **av, char **envp)
 		exec_child_process(&s_cmd, av, ac);
 		s_cmd.fork_count++;
 		s_cmd.arg_index++;
-		// waitpid(s_cmd.pid_arr[s_cmd.fork_count], NULL, 0);
 	}
-	// exec_parent_process(&s_cmd);
+	exec_parent_process(&s_cmd);
 }

@@ -24,7 +24,7 @@
 // 	}
 // }
 
-static void	close_fds(t_cmd *s_cmd, int fd)
+void	close_fds(t_cmd *s_cmd, int fd)
 {
 	int		i;
 
@@ -57,7 +57,6 @@ void	fd_to_pipe_exec(t_cmd *s_cmd, char **av)
 		perror("Execve");
 		exit(EXIT_FAILURE);
 	}
-	waitpid(s_cmd->pid_arr[s_cmd->fork_count], NULL, 0);
 }
 
 
@@ -84,7 +83,6 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av)
 		perror("Execve");
 		exit(EXIT_FAILURE);
 	}
-	waitpid(s_cmd->pid_arr[s_cmd->fork_count], NULL, 0);
 }
 
 
