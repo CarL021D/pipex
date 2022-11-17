@@ -26,17 +26,36 @@ void	exit_if_not_enough_args(int ac, char **av)
 	}
 }
 
-void	exit_if_failed_dup(void)
+void	exit_error(int id, t_cmd *s_cmd)
 {
-	perror("Dup2");
+	if (MALLOC == id)
+		perror("Malloc");
+	if (PIPE == id)
+		perror("Pipe");
+	if (DUP2 == id)
+		perror("Dup2");
+	if (EXECVE == id)
+		perror("Execve");
+	if (OPEN == id)
+		if (s_cmd->fd_in == -1 || s_cmd->fd_out == -1)
+			perror("Open");
+	if (FORK == id) 
+		if (s_cmd->pid_arr[s_cmd->fork_count] == -1)
+			perror("Pipe");
 	exit(EXIT_FAILURE);
 }
 
-void	exit_if_failed_fork(t_cmd *s_cmd)
-{
-	if (s_cmd->pid_arr[s_cmd->fork_count] == -1)
-	{
-		perror("Pipe");
-		exit(EXIT_FAILURE);
-	}
-}
+// void	exit_if_failed_dup(void)
+// {
+// 	perror("Dup2");
+// 	exit(EXIT_FAILURE);
+// }
+
+// void	exit_if_failed_fork(t_cmd *s_cmd)
+// {
+// 	if (s_cmd->pid_arr[s_cmd->fork_count] == -1)
+// 	{
+// 		perror("Pipe");
+// 		exit(EXIT_FAILURE);
+// 	}
+// }

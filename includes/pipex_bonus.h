@@ -23,6 +23,12 @@
 
 # define FD_IN 0
 # define FD_OUT 1
+# define MALLOC 100
+# define FORK 101
+# define DUP2 102
+# define EXECVE 103
+# define OPEN 104
+# define PIPE 105
 # define BUFFER_SIZE 10
 
 typedef struct s_cmd
@@ -69,8 +75,9 @@ int		ft_strcmp(char *s1, char *s2);
 
 
 //                  ERROR
-void	exit_if_failed_dup(void);
-void	exit_if_failed_fork(t_cmd *s_cmd);
+void	exit_error(int id, t_cmd *s_cmd);
+// void	exit_if_failed_dup(void);
+// void	exit_if_failed_fork(t_cmd *s_cmd);
 
 //                  FREE
 void	free_cmd_line(t_cmd *s_cmd);

@@ -1,16 +1,11 @@
-      10      10      61
-aa
-zz
-aa
-zz
-eee aa ahah
-ahah
-ahah
+       7       7      51
 aa
 zz
 ee
-ss
+rr
+       7
 dd
 ff
-gg
-hh
+dd
+ff
+       7

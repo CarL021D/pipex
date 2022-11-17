@@ -36,7 +36,8 @@ void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 	if (!s_cmd->pid_arr)
 	{
 		free(s_cmd->pid_arr);
-		exit(EXIT_FAILURE);
+		exit_error(MALLOC, s_cmd);
+		// exit(EXIT_FAILURE);
 	}
 }
 
@@ -44,10 +45,12 @@ void	fd_in_init(t_cmd *s_cmd, char **av)
 {
 	s_cmd->fd_in = open(av[1], O_RDONLY);
 	if (s_cmd->fd_in == -1)
-	{
-		perror("Open");
-		exit(EXIT_FAILURE);
-	}
+		exit_error(OPEN, s_cmd);
+	// if (s_cmd->fd_in == -1)
+	// {
+	// 	perror("Open");
+	// 	exit(EXIT_FAILURE);
+	// }
 }
 
 void	fd_out_init(t_cmd *s_cmd, int ac, char **av)
@@ -56,9 +59,13 @@ void	fd_out_init(t_cmd *s_cmd, int ac, char **av)
 		s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-
-
-	// "TODO"
+	if (s_cmd->fd_out == -1)
+		exit_error(OPEN, s_cmd);
+	// if (s_cmd->fd_out == -1)
+	// {
+	// 	perror("Open");
+	// 	exit(EXIT_FAILURE);
+	// }
 }
 
 void	pipe_arr_init(t_cmd *s_cmd)
@@ -69,13 +76,15 @@ void	pipe_arr_init(t_cmd *s_cmd)
 	nb_pipe = s_cmd->nb_cmd - 1;
 	s_cmd->pipe_arr = malloc(sizeof(int *) * (nb_pipe));
 	if (!s_cmd->pipe_arr)
-		exit(EXIT_FAILURE);
+		exit_error(MALLOC, s_cmd);
+		// exit(EXIT_FAILURE);
 	i = -1;
 	while (++i < nb_pipe)
 	{
 		s_cmd->pipe_arr[i] = malloc(sizeof(int) * 2);
 		if (!s_cmd->pipe_arr[i])
 			free_pipe_arr(s_cmd, i);
+			exit_error(MALLOC, s_cmd);
 		// TODO: - free pid_arr
 	}
 	i = -1;
@@ -83,8 +92,9 @@ void	pipe_arr_init(t_cmd *s_cmd)
 	{
 		if (pipe(s_cmd->pipe_arr[i]) == -1)
 		{
-			perror("Pipe");
 			free_pipe_arr(s_cmd, nb_pipe);
+			exit_error(PIPE, s_cmd);
+			// perror("Pipe");
 			// FREE 
 		}
 	}
@@ -97,8 +107,9 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 
 	if (pipe(s_cmd->pipe_here_doc) == -1)
 	{
-		perror("Pipe");
-		exit(EXIT_FAILURE);
+		exit_error(PIPE, s_cmd);
+		// perror("Pipe");
+		// exit(EXIT_FAILURE);
 	}
 	delimeter = ft_strjoin(av[s_cmd->arg_index], "\n");
 	while (1)
@@ -111,7 +122,7 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 		free(line);
 	}
 	// free(line);
-	s_cmd->fd_in = s_cmd->pipe_here_doc[1];
+	s_cmd->fd_in = s_cmd->pipe_here_doc[0];
 	close(s_cmd->pipe_here_doc[1]);
 	free(delimeter);
 	s_cmd->arg_index++;

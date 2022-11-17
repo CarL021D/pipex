@@ -47,15 +47,18 @@ void	fd_to_pipe_exec(t_cmd *s_cmd, char **av)
 	{
 		fd_in_init(s_cmd, av);
 		if (dup2(s_cmd->fd_in, STDIN_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_error(DUP2, s_cmd);
+			// exit_if_failed_dup();
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count][1], STDOUT_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_error(DUP2, s_cmd);
+			// exit_if_failed_dup();
 		close_fds(s_cmd, FD_IN);
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');		
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
-		perror("Execve");
-		exit(EXIT_FAILURE);
+		exit_error(EXECVE, s_cmd);
+		// perror("Execve");
+		// exit(EXIT_FAILURE);
 	}
 }
 
@@ -65,24 +68,28 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av)
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{
 		set_here_doc(s_cmd, av);
-		if (s_cmd->fd_in == -1)
-		{
-			perror("Fd");
-			exit(EXIT_FAILURE);
-		}
-		if (dup2(s_cmd->pipe_here_doc[0], STDIN_FILENO) == -1)
-		{
-			write(2, "errorP\n", 7);
-			exit_if_failed_dup();
-		}
+		// if (s_cmd->fd_in == -1)
+		// {
+		// 	perror("Fd");
+		// 	exit(EXIT_FAILURE);
+		// }
+		// if (dup2(s_cmd->pipe_here_doc[0], STDIN_FILENO) == -1)
+		if (dup2(s_cmd->fd_in, STDIN_FILENO) == -1)
+			exit_error(DUP2, s_cmd);
+		// {
+		// 	write(2, "Dup2\n", 5);
+		// 	exit_if_failed_dup();
+		// }
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count][1], STDOUT_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_error(DUP2, s_cmd);
+			// exit_if_failed_dup();
 		close_fds(s_cmd, FD_IN);
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
-		perror("Execve");
-		exit(EXIT_FAILURE);
+		exit_error(EXECVE, s_cmd);
+		// perror("Execve");
+		// exit(EXIT_FAILURE);
 	}
 }
 
@@ -92,15 +99,18 @@ void	pipe_to_pipe_exec(t_cmd *s_cmd, char **av)
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count - 1][0], STDIN_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_error(DUP2, s_cmd);
+			// exit_if_failed_dup();
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count][1], STDOUT_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_error(DUP2, s_cmd);
+			// exit_if_failed_dup();
 		close_fds(s_cmd, -1);
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
-		perror("Execve");
-		exit(EXIT_FAILURE);
+		exit_error(EXECVE, s_cmd);
+		// perror("Execve");
+		// exit(EXIT_FAILURE);
 	}
 }
 
@@ -111,15 +121,18 @@ void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac)
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{		
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count - 1][0], STDIN_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_error(DUP2, s_cmd);
+			// exit_if_failed_dup();
 		if (dup2(s_cmd->fd_out, STDOUT_FILENO) == -1)
-			exit_if_failed_dup();
+			exit_error(DUP2, s_cmd);
+			// exit_if_failed_dup();
 		close_fds(s_cmd, FD_OUT);
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
-		perror("Execve");
-		exit(EXIT_FAILURE);
+		exit_error(EXECVE, s_cmd);
+		// perror("Execve");
+		// exit(EXIT_FAILURE);
 	}
 }
 

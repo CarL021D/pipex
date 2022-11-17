@@ -42,7 +42,9 @@ void	exec_parent_process(t_cmd *s_cmd)
 void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 {
 	s_cmd->pid_arr[s_cmd->fork_count] = fork();
-	exit_if_failed_fork(s_cmd);
+	if (s_cmd->pid_arr[s_cmd->fork_count] == -1)
+		exit_error(FORK, s_cmd);
+	// exit_if_failed_fork(s_cmd);
 	if (s_cmd->fork_count == 0)
 	{
 		if (s_cmd->here_doc)
