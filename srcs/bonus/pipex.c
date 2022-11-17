@@ -12,13 +12,11 @@
 
 #include "../../includes/pipex_bonus.h"
 
-void	var_init(t_cmd *s_cmd, int ac, char **av, char **envp)
-{
-	cmd_struct_init(s_cmd, ac, av, envp);
-	pipe_arr_init(s_cmd);
-	if (s_cmd->here_doc)
-		set_here_doc(s_cmd, av);
-}
+// void	var_init(t_cmd *s_cmd, int ac, char **av, char **envp)
+// {
+// 	cmd_struct_init(s_cmd, ac, av, envp);
+// 	pipe_arr_init(s_cmd);
+// }
 
 void	wait_for_child_process(t_cmd *s_cmd)
 {
@@ -66,12 +64,15 @@ int main(int ac, char **av, char **envp)
 	t_cmd	s_cmd;
 
 	exit_if_not_enough_args(ac, av);
-	var_init(&s_cmd, ac, av, envp);
+	cmd_struct_init(&s_cmd, ac, av, envp);
+	pipe_arr_init(&s_cmd);
 	while (s_cmd.fork_count < s_cmd.nb_cmd)
 	{
 		exec_child_process(&s_cmd, av, ac);
 		s_cmd.fork_count++;
 		s_cmd.arg_index++;
 	}
-	exec_parent_process(&s_cmd);
+	close_fds(&s_cmd, -1);
+	// free_struct(s_cmd);
+	wait_for_child_process(&s_cmd);
 }

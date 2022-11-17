@@ -64,6 +64,7 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av)
 {
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{
+		set_here_doc(s_cmd, av);
 		if (s_cmd->fd_in == -1)
 		{
 			perror("Fd");
