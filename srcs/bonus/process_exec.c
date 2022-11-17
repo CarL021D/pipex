@@ -28,9 +28,9 @@ void	close_fds(t_cmd *s_cmd, int fd)
 {
 	int		i;
 
-	if (fd == 0)
+	if (FD_IN == fd)
 		close(s_cmd->fd_in);
-	if (fd == 1)
+	if (FD_OUT == fd)
 		close(s_cmd->fd_out);
 	i = 0;
 	while (i < (s_cmd->nb_cmd - 1))
@@ -73,8 +73,8 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av)
 		// 	perror("Fd");
 		// 	exit(EXIT_FAILURE);
 		// }
-		// if (dup2(s_cmd->pipe_here_doc[0], STDIN_FILENO) == -1)
-		if (dup2(s_cmd->fd_in, STDIN_FILENO) == -1)
+		// if (dup2(s_cmd->fd_in, STDIN_FILENO) == -1)
+		if (dup2(s_cmd->pipe_here_doc[0], STDIN_FILENO) == -1)
 			exit_error(DUP2, s_cmd);
 		// {
 		// 	write(2, "Dup2\n", 5);

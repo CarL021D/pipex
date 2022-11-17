@@ -77,14 +77,17 @@ void	pipe_arr_init(t_cmd *s_cmd)
 	s_cmd->pipe_arr = malloc(sizeof(int *) * (nb_pipe));
 	if (!s_cmd->pipe_arr)
 		exit_error(MALLOC, s_cmd);
+	// if (!s_cmd->pipe_arr)
 		// exit(EXIT_FAILURE);
 	i = -1;
 	while (++i < nb_pipe)
 	{
 		s_cmd->pipe_arr[i] = malloc(sizeof(int) * 2);
 		if (!s_cmd->pipe_arr[i])
+		{
 			free_pipe_arr(s_cmd, i);
 			exit_error(MALLOC, s_cmd);
+		}
 		// TODO: - free pid_arr
 	}
 	i = -1;
@@ -122,8 +125,8 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 		free(line);
 	}
 	// free(line);
-	s_cmd->fd_in = s_cmd->pipe_here_doc[0];
-	close(s_cmd->pipe_here_doc[1]);
+	// s_cmd->fd_in = s_cmd->pipe_here_doc[0];
+	// close(s_cmd->pipe_here_doc[1]);
 	free(delimeter);
 	s_cmd->arg_index++;
 }

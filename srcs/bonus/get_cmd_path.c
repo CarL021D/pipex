@@ -45,6 +45,7 @@ char	*path_str(char *full_path)
 	path = malloc(sizeof(char) * ft_strlen(full_path) + 1);
 	if (!path)
 		exit(EXIT_FAILURE);
+		// exit_error(MALLOC, s_cmd);
 	i = 0;
 	while (full_path[i])
 	{
