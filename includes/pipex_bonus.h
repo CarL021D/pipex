@@ -21,8 +21,8 @@
 #include <sys/wait.h>
 #include <sys/errno.h>
 
-# define CHILD_1 1
-# define CHILD_2 2
+# define FD_IN 0
+# define FD_OUT 1
 # define BUFFER_SIZE 10
 
 typedef struct s_cmd
