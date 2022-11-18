@@ -12,17 +12,11 @@
 
 #include "../../includes/pipex_bonus.h"
 
-// static void	close_fds(t_cmd *s_cmd, int last_fd)
-// {
-// 	int		fd_x;
-
-// 	fd_x = 3 + (s_cmd->nb_cmd * 2) + last_fd;
-// 	while (fd_x > 2)
-// 	{
-// 		close(fd_x);
-// 		fd_x--;
-// 	}
-// }
+void	close_here_doc_fd(t_cmd *s_cmd)
+{
+	close(s_cmd->pipe_here_doc[0]);
+	close(s_cmd->pipe_here_doc[1]);
+}
 
 void	close_fds(t_cmd *s_cmd, int fd)
 {
@@ -83,7 +77,14 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av)
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count][1], STDOUT_FILENO) == -1)
 			exit_error(DUP2, s_cmd);
 			// exit_if_failed_dup();
-		close_fds(s_cmd, FD_IN);
+	
+
+		close_here_doc_fd(s_cmd);
+		close_fds(s_cmd, -1);
+		// close(s_cmd->pipe_here_doc[1]);
+		// close(s_cmd->pipe_here_doc[0]);
+
+		// close_fds(s_cmd, FD_IN);
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
@@ -105,6 +106,7 @@ void	pipe_to_pipe_exec(t_cmd *s_cmd, char **av)
 			exit_error(DUP2, s_cmd);
 			// exit_if_failed_dup();
 		close_fds(s_cmd, -1);
+
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
@@ -126,6 +128,7 @@ void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac)
 		if (dup2(s_cmd->fd_out, STDOUT_FILENO) == -1)
 			exit_error(DUP2, s_cmd);
 			// exit_if_failed_dup();
+
 		close_fds(s_cmd, FD_OUT);
 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');

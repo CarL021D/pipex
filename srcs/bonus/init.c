@@ -18,13 +18,16 @@ void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 	{
 		s_cmd->here_doc = 1;
 		s_cmd->nb_cmd = ac - 4;
+		s_cmd->arg_index = 3;
+
 	}
 	else
 	{
 		s_cmd->here_doc = 0;
 		s_cmd->nb_cmd = ac - 3;
+		s_cmd->arg_index = 2;
 	}
-	s_cmd->arg_index = 2;
+	// s_cmd->arg_index = 2;
 	s_cmd->envp = envp;
 	s_cmd->fork_count = 0;
 	// if (pipe(s_cmd->pipe_) == -1)
@@ -114,10 +117,10 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 		// perror("Pipe");
 		// exit(EXIT_FAILURE);
 	}
-	delimeter = ft_strjoin(av[s_cmd->arg_index], "\n");
+	delimeter = ft_strjoin(av[2], "\n");
 	while (1)
 	{
-		write(1, "heredoc> ", 9);
+		write(1, "pipe heredoc> ", 14);
 		line = get_next_line(STDIN_FILENO);
 		if (!line || ft_strcmp(line, delimeter))
 			break;
@@ -126,6 +129,7 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 	}
 	// free(line);
 	// s_cmd->fd_in = s_cmd->pipe_here_doc[0];
+	// close(s_cmd->pipe_here_doc[0]);
 	// close(s_cmd->pipe_here_doc[1]);
 	free(delimeter);
 	s_cmd->arg_index++;

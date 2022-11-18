@@ -55,6 +55,7 @@ void	exit_if_not_enough_args(int ac, char **av);
 void	fd_in_init(t_cmd *s_cmd, char **av);
 void	fd_out_init(t_cmd *s_cmd, int ac, char **av);
 void	close_fds(t_cmd *s_cmd, int fd);
+// void	close_here_doc_fd(t_cmd *s_cmd);
 void	pipe_arr_init(t_cmd *s_cmd);
 void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp);
 void	set_here_doc(t_cmd *s_cmd, char **av);
