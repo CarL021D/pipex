@@ -34,7 +34,6 @@ void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 	// 	return ;
 	// if (pipe(s_cmd->temp_pipe))
 	// 	return ;
-	// TODO: - Free method to add
 	s_cmd->pid_arr = malloc(sizeof(pid_t) * s_cmd->nb_cmd);
 	if (!s_cmd->pid_arr)
 	{
@@ -79,30 +78,36 @@ void	pipe_arr_init(t_cmd *s_cmd)
 	nb_pipe = s_cmd->nb_cmd - 1;
 	s_cmd->pipe_arr = malloc(sizeof(int *) * (nb_pipe));
 	if (!s_cmd->pipe_arr)
+	{
+		free(s_cmd->pid_arr);
 		exit_error(MALLOC, s_cmd);
-	// if (!s_cmd->pipe_arr)
-		// exit(EXIT_FAILURE);
+	}
 	i = -1;
-	while (++i < nb_pipe)
+	while (i < nb_pipe)
 	{
 		s_cmd->pipe_arr[i] = malloc(sizeof(int) * 2);
 		if (!s_cmd->pipe_arr[i])
-		{
-			free_pipe_arr(s_cmd, i);
-			exit_error(MALLOC, s_cmd);
-		}
-		// TODO: - free pid_arr
+			free_var_pipe_arr_error(MALLOC, s_cmd, i);
+		i++;
+		// if (!s_cmd->pipe_arr[i])
+		// {
+		// 	free(s_cmd->pid_arr);
+		// 	free_pipe_arr(s_cmd, i);
+		// 	exit_error(MALLOC, s_cmd);
+		// }
 	}
-	i = -1;
-	while (++i < nb_pipe)
+	i = 0;
+	while (i < nb_pipe)
 	{
 		if (pipe(s_cmd->pipe_arr[i]) == -1)
-		{
-			free_pipe_arr(s_cmd, nb_pipe);
-			exit_error(PIPE, s_cmd);
-			// perror("Pipe");
-			// FREE 
-		}
+			free_var_pipe_arr_error(MALLOC, s_cmd, i);
+		i++;
+		// if (pipe(s_cmd->pipe_arr[i]) == -1)
+		// {
+		// 	free(s_cmd->pid_arr);
+		// 	free_pipe_arr(s_cmd, nb_pipe);
+		// 	exit_error(PIPE, s_cmd);
+		// }
 	}
 }
 

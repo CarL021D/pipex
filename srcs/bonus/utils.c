@@ -12,6 +12,8 @@
 
 #include "../../includes/pipex_bonus.h"
 
+// ntchg
+
 size_t	ft_strlen(char *str)
 {
 	int		i;

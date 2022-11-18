@@ -29,25 +29,22 @@ void	free_pipe_arr(t_cmd *s_cmd, int i)
 {
 	while (i)
 	{
-		free(s_cmd->pipe_arr[i]);
+		free(s_cmd->pipe_arr[i - 1]);
 		i--;
 	}
-	if (!s_cmd->here_doc)
-		close(s_cmd->fd_in);
-	free(s_cmd->pid_arr);
+	free(s_cmd->pipe_arr);
 	// exit(EXIT_FAILURE);
 }
 
-// void	free_struct(t_cmd *s_cmd)
-// {
-// 	if (s_cmd->cmd1_path != NULL)
-// 		free(s_cmd->cmd1_path);
-// 	if (s_cmd->cmd2_path != NULL)
-// 		free(s_cmd->cmd2_path);
-// 	if (s_cmd->cmd1_options != NULL)
-// 		free_double_tab(s_cmd->cmd1_options);
-// 	if (s_cmd->cmd2_options != NULL)
-// 		free_double_tab(s_cmd->cmd2_options);
-// 	if (s_cmd->pid_arr != NULL)
-// 		free(s_cmd->pid_arr);
-// }
+void	free_struct(t_cmd *s_cmd)
+{
+		free(s_cmd->pid_arr);
+		free_pipe_arr(s_cmd, (s_cmd->nb_cmd - 1));
+}
+
+void	free_var_pipe_arr_error(int id, t_cmd *s_cmd, int count)
+{
+	free(s_cmd->pid_arr);
+	free_pipe_arr(s_cmd, count);
+	exit_error(id, s_cmd);
+}

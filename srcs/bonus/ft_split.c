@@ -12,6 +12,8 @@
 
 #include "../../includes/pipex_bonus.h"
 
+// ntchg
+
 static void	free_split_tab(char **arr, int i)
 {
 	while (i)
@@ -87,10 +89,7 @@ char	**ft_split(char *str, char c)
 			j++;
 		arr[i] = ft_malloc_word(str + j, c);
 		if (!arr[i])
-		{
-			free_split_tab(arr, i);
-			return (NULL);
-		}
+			return (free_split_tab(arr, i), NULL);
 		j += ft_word_len(str + j, c);
 	}
 	arr[i] = NULL;

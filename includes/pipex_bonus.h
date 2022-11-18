@@ -85,6 +85,7 @@ void	free_cmd_line(t_cmd *s_cmd);
 void	free_double_tab(char **tab);
 void	free_struct(t_cmd *s_cmd);
 void	free_pipe_arr(t_cmd *s_cmd, int i);
+void	free_var_pipe_arr_error(int id, t_cmd *s_cmd, int count);
 
 
 //					GET NEXT LINE
