@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:47:31 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/16 03:02:22 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 22:11:03 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,9 @@ void	pipe_to_pipe_exec(t_cmd *s_cmd, char **av)
 
 void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac)
 {
-	fd_out_init(s_cmd, ac, av);
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{		
+		fd_out_init(s_cmd, ac, av);
 		if (dup2(s_cmd->pipe_arr[s_cmd->fork_count - 1][0], STDIN_FILENO) == -1)
 			exit_error(DUP2, s_cmd);
 			// exit_if_failed_dup();

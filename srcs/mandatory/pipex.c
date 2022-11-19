@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 08:03:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/14 00:27:06 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 21:09:17 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 #include <sys/wait.h>
 #include <sys/errno.h>
 
-
-// Maybe to remove because allocation are made inside child so no need to free
 static void	init_cmd_struct(t_cmd *s_cmd)
 {
 	s_cmd->cmd1_path = NULL;
@@ -29,15 +27,12 @@ static void	init_cmd_struct(t_cmd *s_cmd)
 	s_cmd->cmd2_options = NULL;
 }
 
-// Set fd in open inside a child process to avoid to have to close it inside 
-// on other processes
-
 static void	child_1_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 {
 	if (s_cmd->pid_1 == 0)
 	{
 		s_cmd->fd_in = open(av[1], O_RDONLY);
-		exit_if_failed_fd_open(s_cmd);
+		exit_if_failed_fd_open(s_cmd, FD_IN);
 		close(pipe_[0]);
 		if (dup2(s_cmd->fd_in, STDIN_FILENO) == -1)
 			exit_if_failed_dup(s_cmd);
@@ -57,7 +52,7 @@ static void	child_2_exec(t_cmd *s_cmd, char **av, int *pipe_, char **envp)
 {
 	if (s_cmd->pid_2 == 0)
 	{		s_cmd->fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		exit_if_failed_fd_open(s_cmd);
+		exit_if_failed_fd_open(s_cmd, FD_OUT);
 		close(pipe_[1]);
 		if (dup2(pipe_[0], STDIN_FILENO) == -1)
 			exit_if_failed_dup(s_cmd);

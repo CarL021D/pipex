@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:04 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/19 18:56:28 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 20:16:52 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 	char	*line;
 	char	*delimeter;
 
+
 	if (pipe(s_cmd->pipe_here_doc) == -1)
 	{
 		exit_error(PIPE, s_cmd);
@@ -123,6 +124,7 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 		// exit(EXIT_FAILURE);
 	}
 	delimeter = ft_strjoin(av[2], "\n");
+	line = NULL;
 	while (1)
 	{
 		write(1, "pipe heredoc> ", 14);

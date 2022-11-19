@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/19 18:42:25 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 22:03:09 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,13 @@ char	*get_command_path(t_cmd *s_cmd, char *av)
 		if (access(command_path, F_OK | X_OK) == 0)
 			return (free_double_tab(segmented_path),
 				free_double_tab(cmd), command_path);
+		free(command_path);
 		i++;
 	}
-	free(command_path);
 	free_double_tab(segmented_path);
 	free_double_tab(cmd);
+	free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
+	free(s_cmd->pid_arr);
 	perror("Malloc");
 	exit(EXIT_FAILURE);
 }

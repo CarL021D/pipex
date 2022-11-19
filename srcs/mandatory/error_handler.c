@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/14 00:22:18 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 21:07:27 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@ void	exit_if_not_5_args(int ac)
 	}
 }
 
-void	exit_if_failed_fd_open(t_cmd *s_cmd)
+void	exit_if_failed_fd_open(t_cmd *s_cmd, int id)
 {
-	if (s_cmd->fd_in == -1)
+		if (FD_IN == id && s_cmd->fd_in == -1)
 	{
 		perror("Open");
 		
 		exit(EXIT_FAILURE);
 	}
-	if (s_cmd->fd_out == -1)
+	if (FD_OUT == id && s_cmd->fd_out == -1)
 	{
 		perror("Open");
 		exit(EXIT_FAILURE);

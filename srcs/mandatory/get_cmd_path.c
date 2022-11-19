@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/20 16:09:33 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 22:06:22 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,6 @@ char	*get_command_path(char *av, char **envp)
 		i++;
 	}
 	free_double_tab(segmented_path);
+	free_double_tab(cmd);
 	exit(EXIT_FAILURE);
 }

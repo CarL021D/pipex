@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:19 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/19 19:18:55 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 22:14:35 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 	}
 	else if (s_cmd->fork_count == (s_cmd->nb_cmd - 1))
 	{
-		fd_out_init(s_cmd, ac , av);
+		// fd_out_init(s_cmd, ac , av);
 		pipe_to_fd_exec(s_cmd, av, ac);
 	}	
 	else
