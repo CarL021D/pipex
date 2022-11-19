@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/24 18:14:59 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 22:48:05 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ void	exit_error(int id, t_cmd *s_cmd)
 	if (EXECVE == id)
 		perror("Execve");
 	if (OPEN == id)
-		if (s_cmd->fd_in == -1 || s_cmd->fd_out == -1)
-			perror("Open");
+		perror("Open");
 	if (FORK == id) 
 		if (s_cmd->pid_arr[s_cmd->fork_count] == -1)
 			perror("Pipe");
