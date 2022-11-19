@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/13 23:54:29 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 19:13:45 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	exit_if_not_enough_args(int ac, char **av);
 void	fd_in_init(t_cmd *s_cmd, char **av);
 void	fd_out_init(t_cmd *s_cmd, int ac, char **av);
 void	close_fds(t_cmd *s_cmd, int fd);
-// void	close_here_doc_fd(t_cmd *s_cmd);
+void	close_here_doc_fd(t_cmd *s_cmd);
 void	pipe_arr_init(t_cmd *s_cmd);
 void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp);
 void	set_here_doc(t_cmd *s_cmd, char **av);
@@ -74,7 +74,6 @@ char	*path_str(char *full_path);
 char	*ft_strnstr(char *full_path, const char *s2, size_t n);
 int		ft_strcmp(char *s1, char *s2);
 
-
 //                  ERROR
 void	exit_error(int id, t_cmd *s_cmd);
 // void	exit_if_failed_dup(void);
@@ -85,8 +84,7 @@ void	free_cmd_line(t_cmd *s_cmd);
 void	free_double_tab(char **tab);
 void	free_struct(t_cmd *s_cmd);
 void	free_pipe_arr(t_cmd *s_cmd, int i);
-void	free_var_pipe_arr_error(int id, t_cmd *s_cmd, int count);
-
+void	free_pipe_and_pid_arr(int id, t_cmd *s_cmd, int count);
 
 //					GET NEXT LINE
 char	*get_next_line(int fd);

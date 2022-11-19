@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/20 16:09:33 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 18:42:25 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,6 @@ char	*get_command_path(t_cmd *s_cmd, char *av)
 	free(command_path);
 	free_double_tab(segmented_path);
 	free_double_tab(cmd);
-	exit_error(MALLOC, s_cmd);
-	// exit(EXIT_FAILURE);
+	perror("Malloc");
+	exit(EXIT_FAILURE);
 }

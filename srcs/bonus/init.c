@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:04 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/14 01:53:33 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 18:56:28 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,12 @@ void	pipe_arr_init(t_cmd *s_cmd)
 		free(s_cmd->pid_arr);
 		exit_error(MALLOC, s_cmd);
 	}
-	i = -1;
+	i = 0;
 	while (i < nb_pipe)
 	{
 		s_cmd->pipe_arr[i] = malloc(sizeof(int) * 2);
 		if (!s_cmd->pipe_arr[i])
-			free_var_pipe_arr_error(MALLOC, s_cmd, i);
+			free_pipe_and_pid_arr(MALLOC, s_cmd, i);
 		i++;
 		// if (!s_cmd->pipe_arr[i])
 		// {
@@ -100,7 +100,7 @@ void	pipe_arr_init(t_cmd *s_cmd)
 	while (i < nb_pipe)
 	{
 		if (pipe(s_cmd->pipe_arr[i]) == -1)
-			free_var_pipe_arr_error(MALLOC, s_cmd, i);
+			free_pipe_and_pid_arr(MALLOC, s_cmd, i);
 		i++;
 		// if (pipe(s_cmd->pipe_arr[i]) == -1)
 		// {

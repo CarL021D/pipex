@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:19 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/14 00:45:01 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 19:18:55 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,6 @@ void	wait_for_child_process(t_cmd *s_cmd)
 	}
 }
 
-void	exec_parent_process(t_cmd *s_cmd)
-{
-	// free_struct(s_cmd);
-	close_fds(s_cmd, -1);
-	// if (s_cmd->here_doc)
-	// 	close_here_doc_fd(s_cmd);
-	wait_for_child_process(s_cmd);
-	// waitpid(s_cmd->pid_arr[s_cmd->fork_count], NULL, 0);
-}
 
 void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 {
@@ -65,6 +56,18 @@ void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 		pipe_to_pipe_exec(s_cmd, av);
 }
 
+void	exec_parent_process(t_cmd *s_cmd)
+{
+	// free_struct(s_cmd);
+	close_fds(s_cmd, -1);
+	// if (s_cmd->here_doc)
+	// 	close_here_doc_fd(s_cmd);
+	free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
+	wait_for_child_process(s_cmd);
+	free(s_cmd->pid_arr);
+	// waitpid(s_cmd->pid_arr[s_cmd->fork_count], NULL, 0);
+}
+
 int main(int ac, char **av, char **envp)
 {
 	t_cmd	s_cmd;
@@ -79,7 +82,10 @@ int main(int ac, char **av, char **envp)
 		s_cmd.fork_count++;
 		s_cmd.arg_index++;
 	}
-	close_fds(&s_cmd, -1);
+	exec_parent_process(&s_cmd);
+	// close_fds(&s_cmd, -1);
 	// free_struct(s_cmd);
-	wait_for_child_process(&s_cmd);
+	// free_pipe_arr(&s_cmd, s_cmd.nb_cmd - 1);
+	// free(s_cmd.pid_arr);
+	// wait_for_child_process(&s_cmd);
 }

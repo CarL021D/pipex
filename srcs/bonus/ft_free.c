@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 23:05:14 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/13 23:53:16 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/19 18:52:04 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	free_struct(t_cmd *s_cmd)
 		free_pipe_arr(s_cmd, (s_cmd->nb_cmd - 1));
 }
 
-void	free_var_pipe_arr_error(int id, t_cmd *s_cmd, int count)
+void	free_pipe_and_pid_arr(int id, t_cmd *s_cmd, int count)
 {
 	free(s_cmd->pid_arr);
 	free_pipe_arr(s_cmd, count);
