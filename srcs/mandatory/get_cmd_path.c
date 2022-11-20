@@ -71,7 +71,7 @@ static char	*cmd_env_path_line(char **envp)
 	exit(EXIT_FAILURE);
 }
 
-char	*get_command_path(char *av, char **envp)
+char	*get_command_path(t_cmd *s_cmd, char *av, char **envp)
 {
 	char	**segmented_path;
 	char	*command_path;
@@ -95,7 +95,18 @@ char	*get_command_path(char *av, char **envp)
 		free(command_path);
 		i++;
 	}
-	free_double_tab(segmented_path);
-	free_double_tab(cmd);
+	error_no_path(s_cmd, av, segmented_path, cmd, i);
 	exit(EXIT_FAILURE);
+	// free_double_tab(segmented_path);
+	// free_double_tab(cmd);
+	// free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
+	// free(s_cmd->pid_arr);
+	// if (!path[i])
+	// {
+	// 	write(2, "zsh: command not found: ", 24);
+	// 	write(2, av, ft_strlen(av));
+	// 	write(2, "\n", 1);
+	// }
+	// else
+	// 	perror("Malloc");
 }

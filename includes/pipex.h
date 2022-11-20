@@ -28,15 +28,14 @@ typedef struct s_cmd
 	pid_t	pid_2;
 	int		fd_in;
 	int		fd_out;
-	char	*cmd1_path;
+	char	*cmd_path;
 	char	*cmd2_path;
-	char	**cmd1_options;
+	char	**cmd_options;
 	char	**cmd2_options;
 }	t_cmd;
 
 //					PIPEX
-void	exit_if_not_5_args(int ac);
-char	*get_command_path(char *av, char **envp);
+char	*get_command_path(t_cmd *s_cmd, char *av, char **envp);
 
 //					UTILS
 size_t	ft_strlen(char *str);
@@ -47,9 +46,11 @@ char	*path_str(char *full_path);
 char	*ft_strnstr(char *full_path, const char *s2, size_t n);
 
 //					ERROR
+void	exit_if_not_5_args(int ac);
 void	exit_if_failed_fd_open(t_cmd *s_cmd, int id);
 void	exit_if_failed_dup(t_cmd *s_cmd);
 void	exit_if_failed_fork(t_cmd *s_cmd, int child);
+void	error_no_path(t_cmd *s_cmd, char *av, char **path, char **cmd, int i);
 
 //					FREE
 void	free_double_tab(char **tab);
