@@ -47,8 +47,8 @@ void	fd_to_pipe_exec(t_cmd *s_cmd, char **av)
 			exit_error(DUP2, s_cmd);
 			// exit_if_failed_dup();
 		close_fds(s_cmd, FD_IN);
-		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
-		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');		
+		// s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+		// s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');		
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 		exit_error(EXECVE, s_cmd);
 		// perror("Execve");
@@ -85,8 +85,8 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av)
 		// close(s_cmd->pipe_here_doc[0]);
 
 		// close_fds(s_cmd, FD_IN);
-		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
-		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
+		// s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+		// s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 		exit_error(EXECVE, s_cmd);
 		// perror("Execve");
@@ -95,7 +95,8 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av)
 }
 
 
-void	pipe_to_pipe_exec(t_cmd *s_cmd, char **av)
+// void	pipe_to_pipe_exec(t_cmd *s_cmd, char **av)
+void	pipe_to_pipe_exec(t_cmd *s_cmd)
 {
 	if (s_cmd->pid_arr[s_cmd->fork_count] == 0)
 	{
@@ -107,8 +108,8 @@ void	pipe_to_pipe_exec(t_cmd *s_cmd, char **av)
 			// exit_if_failed_dup();
 		close_fds(s_cmd, -1);
 
-		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
-		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
+		// s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+		// s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 		exit_error(EXECVE, s_cmd);
 		// perror("Execve");
@@ -130,8 +131,8 @@ void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac)
 			// exit_if_failed_dup();
 
 		close_fds(s_cmd, FD_OUT);
-		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
-		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
+		// s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+		// s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 		exit_error(EXECVE, s_cmd);
 		// perror("Execve");

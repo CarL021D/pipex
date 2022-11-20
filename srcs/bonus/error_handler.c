@@ -48,6 +48,7 @@ void	error_no_path(t_cmd *s_cmd, char *av, char **path, char **cmd, int i)
 	free_double_tab(cmd);
 	free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
 	free(s_cmd->pid_arr);
+	// free_execve_params(s_cmd);
 	if (!path[i])
 	{
 		write(2, "zsh: command not found: ", 24);

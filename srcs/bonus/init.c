@@ -34,6 +34,8 @@ void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 	// 	return ;
 	// if (pipe(s_cmd->temp_pipe))
 	// 	return ;
+	s_cmd->cmd_path = NULL;
+	s_cmd->cmd_options = NULL;
 	s_cmd->pid_arr = malloc(sizeof(pid_t) * s_cmd->nb_cmd);
 	if (!s_cmd->pid_arr)
 	{

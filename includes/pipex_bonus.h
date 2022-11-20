@@ -63,7 +63,7 @@ void	set_here_doc(t_cmd *s_cmd, char **av);
 //					PROCESS EXEC
 void	fd_to_pipe_exec(t_cmd *s_cmd, char **av);
 void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av);
-void	pipe_to_pipe_exec(t_cmd *s_cmd, char **av);
+void	pipe_to_pipe_exec(t_cmd *s_cmd);
 void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac);
 
 //                  UTILS
@@ -87,6 +87,7 @@ void	free_double_tab(char **tab);
 void	free_struct(t_cmd *s_cmd);
 void	free_pipe_arr(t_cmd *s_cmd, int i);
 void	free_pipe_and_pid_arr(int id, t_cmd *s_cmd, int count);
+void	free_execve_params(t_cmd *s_cmd);
 
 //					GET NEXT LINE
 char	*get_next_line(int fd);

@@ -55,7 +55,7 @@ void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 		pipe_to_fd_exec(s_cmd, av, ac);
 	}	
 	else
-		pipe_to_pipe_exec(s_cmd, av);
+		pipe_to_pipe_exec(s_cmd);
 }
 
 void	exec_parent_process(t_cmd *s_cmd)
@@ -66,8 +66,17 @@ void	exec_parent_process(t_cmd *s_cmd)
 	// 	close_here_doc_fd(s_cmd);
 	free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
 	wait_for_child_process(s_cmd);
+	// free_execve_params(s_cmd);
 	free(s_cmd->pid_arr);
 	// waitpid(s_cmd->pid_arr[s_cmd->fork_count], NULL, 0);
+}
+
+void	free_execve_params(t_cmd *s_cmd)
+{
+	if (s_cmd->cmd_path != NULL)
+		free(s_cmd->cmd_path);
+	if (s_cmd->cmd_options != NULL)
+		free_double_tab(s_cmd->cmd_options);
 }
 
 int main(int ac, char **av, char **envp)
@@ -81,7 +90,11 @@ int main(int ac, char **av, char **envp)
 	pipe_arr_init(&s_cmd);
 	while (s_cmd.fork_count < s_cmd.nb_cmd)
 	{
+		s_cmd.cmd_path = get_command_path(&s_cmd, 
+			av[s_cmd.arg_index]);
+		s_cmd.cmd_options = ft_split(av[s_cmd.arg_index], ' ');		
 		exec_child_process(&s_cmd, av, ac);
+		free_execve_params(&s_cmd);
 		s_cmd.fork_count++;
 		s_cmd.arg_index++;
 	}
