@@ -13,14 +13,18 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <sys/errno.h>
 
 # define CHILD_1 1
 # define CHILD_2 2
-# define FD_IN 0
-# define FD_OUT 1
+# define FD_IN 100
+# define FD_OUT 101
 
 typedef struct s_cmd
 {
@@ -36,6 +40,10 @@ typedef struct s_cmd
 
 //					PIPEX
 char	*get_command_path(t_cmd *s_cmd, char *av, char **envp);
+
+//					INIT
+void	init_cmd_struct(t_cmd *s_cmd);
+void	init_fd_in_or_out(int id, t_cmd *s_cmd, char **av);
 
 //					UTILS
 size_t	ft_strlen(char *str);

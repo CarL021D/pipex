@@ -19,11 +19,7 @@
 #include <sys/wait.h>
 #include <sys/errno.h>
 
-static void	init_cmd_struct(t_cmd *s_cmd)
-{
-	s_cmd->cmd_path = NULL;
-	s_cmd->cmd_path = NULL;
-}
+
 
 static void	child_1_exec(t_cmd *s_cmd, int *pipe_, char **envp)
 {
@@ -58,6 +54,7 @@ static void	child_2_exec(t_cmd *s_cmd, int *pipe_, char **envp)
 			exit_if_failed_dup(s_cmd);
 		if (dup2(s_cmd->fd_out, STDOUT_FILENO) == -1)
 			exit_if_failed_dup(s_cmd);
+		close(s_cmd->fd_in);
 		close(s_cmd->fd_out);
 		// s_cmd->cmd_path = get_command_path(av[3], envp);
 		// s_cmd->cmd_options = ft_split(av[3], ' ');
@@ -78,10 +75,9 @@ void	free_execve_params(t_cmd *s_cmd)
 
 static void	exec_parent_process(t_cmd *s_cmd, int *pipe_)
 {
-	// close(s_cmd->fd_in);
-	// close(s_cmd->fd_out);
+	close(s_cmd->fd_in);
+	close(s_cmd->fd_out);
 	free_execve_params(s_cmd);
-	
 	close(pipe_[0]);
 	close(pipe_[1]);
 	// free_struct(s_cmd);
@@ -90,6 +86,8 @@ static void	exec_parent_process(t_cmd *s_cmd, int *pipe_)
 }
 
 // void	init_exec_1(t_cmd *s_cmd, char **)
+
+
 
 int	main(int ac, char **av, char **envp)
 {
@@ -100,30 +98,21 @@ int	main(int ac, char **av, char **envp)
 	init_cmd_struct(&s_cmd);
 	if (pipe(pipe_) == -1)
 		return (perror("Pipe"), 1);
-	
-	s_cmd.fd_in = open(av[1], O_RDONLY);
-	
+	// s_cmd.fd_in = open(av[1], O_RDONLY);
+	init_fd_in_or_out(FD_IN, &s_cmd, av);
 	s_cmd.cmd_path = get_command_path(&s_cmd, av[2], envp);
 	s_cmd.cmd_options = ft_split(av[2], ' ');
-	
 	s_cmd.pid_1 = fork();
-	
 	exit_if_failed_fork(&s_cmd, CHILD_1);
 	child_1_exec(&s_cmd, pipe_, envp);
-
 	free_execve_params(&s_cmd);
-
-	close(s_cmd.fd_in);
-	s_cmd.fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	
+	// close(s_cmd.fd_in);
+	// s_cmd.fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	init_fd_in_or_out(FD_OUT, &s_cmd, av);
 	s_cmd.cmd_path = get_command_path(&s_cmd, av[3], envp);
 	s_cmd.cmd_options = ft_split(av[3], ' ');
-
 	s_cmd.pid_2 = fork();
 	exit_if_failed_fork(&s_cmd, CHILD_2);
 	child_2_exec(&s_cmd, pipe_, envp);
-	close(s_cmd.fd_out);
-
-
 	exec_parent_process(&s_cmd, pipe_);
 }

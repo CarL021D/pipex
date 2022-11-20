@@ -13,6 +13,7 @@
 NAME = pipex
 
 SRCS	= 		srcs/mandatory/pipex.c 					\
+				srcs/mandatory/init.c					\
 				srcs/mandatory/ft_split.c				\
 				srcs/mandatory/get_cmd_path.c			\
 				srcs/mandatory/path_parsing_utils.c		\
