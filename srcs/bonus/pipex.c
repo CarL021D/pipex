@@ -6,11 +6,13 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:19 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/19 22:14:35 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/20 01:29:49 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/pipex_bonus.h"
+
+// Check if cmd exist inside the parent
 
 void	var_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 {
@@ -73,6 +75,7 @@ int main(int ac, char **av, char **envp)
 	t_cmd	s_cmd;
 
 	exit_if_not_enough_args(ac, av);
+	check_env(envp);
 	// var_init(&s_cmd, ac, av, envp);
 	cmd_struct_init(&s_cmd, ac, av, envp);
 	pipe_arr_init(&s_cmd);

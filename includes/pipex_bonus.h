@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/19 19:13:45 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/20 01:02:05 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,9 @@ char	*ft_strnstr(char *full_path, const char *s2, size_t n);
 int		ft_strcmp(char *s1, char *s2);
 
 //                  ERROR
+void	check_env(char **envp);
 void	exit_error(int id, t_cmd *s_cmd);
+void	error_no_path(t_cmd *s_cmd, char *av, char **path, char **cmd, int i);
 // void	exit_if_failed_dup(void);
 // void	exit_if_failed_fork(t_cmd *s_cmd);
 

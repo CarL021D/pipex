@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/19 22:48:05 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/20 01:25:24 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,38 @@ void	exit_if_not_enough_args(int ac, char **av)
 		write(2, "at least 5 arguments are required\n", 34);
 		exit(EXIT_FAILURE);
 	}
+}
+
+void	check_env(char **envp)
+{
+	char	*path_env;
+	int		i;
+
+	i = 0;
+	while (envp[i])
+	{
+		path_env = ft_strnstr(envp[i], "PATH=", 5);
+		if (path_env != NULL)
+			return ;
+		i++;
+	}
+	write(2, "No environment\n", 16);
+}
+
+void	error_no_path(t_cmd *s_cmd, char *av, char **path, char **cmd, int i)
+{
+	free_double_tab(path);
+	free_double_tab(cmd);
+	free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
+	free(s_cmd->pid_arr);
+	if (!path[i])
+	{
+		write(2, "zsh: command not found: ", 24);
+		write(2, av, ft_strlen(av));
+		write(2, "\n", 1);
+	}
+	else
+		perror("Malloc");
 }
 
 void	exit_error(int id, t_cmd *s_cmd)

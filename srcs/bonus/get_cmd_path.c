@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/19 22:03:09 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/20 01:01:38 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ static char	*cmd_env_path_line(t_cmd *s_cmd)
 			return (path_env);
 		i++;
 	}
+	perror("No env");
 	exit(EXIT_FAILURE);
 }
 
@@ -106,10 +107,18 @@ char	*get_command_path(t_cmd *s_cmd, char *av)
 		free(command_path);
 		i++;
 	}
-	free_double_tab(segmented_path);
-	free_double_tab(cmd);
-	free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
-	free(s_cmd->pid_arr);
-	perror("Malloc");
+	error_no_path(s_cmd, av, segmented_path, cmd, i);
 	exit(EXIT_FAILURE);
+	// free_double_tab(segmented_path);
+	// free_double_tab(cmd);
+	// free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
+	// free(s_cmd->pid_arr);
+	// if (!segmented_path[i])
+	// {
+	// 	write(2, "zsh: command not found: ", 24);
+	// 	write(2, av, ft_strlen(av));
+	// 	write(2, "\n", 1);
+	// }
+	// else
+	// 	perror("Malloc");
 }
