@@ -1,73 +1,110 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
+#    MakefileMandatory                                  :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: caboudar <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/10/24 15:12:48 by caboudar          #+#    #+#              #
-#    Updated: 2022/11/13 23:43:41 by caboudar         ###   ########.fr        #
+#    Created: 2022/10/05 07:40:34 by caboudar          #+#    #+#              #
+#    Updated: 2022/10/24 15:35:15 by caboudar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = pipex
+RED=\033[0;91m
+GREEN=\033[0;32m
+RESET=\033[0m
 
-SRCS	= 		srcs/mandatory/pipex.c 					\
-				srcs/mandatory/init.c					\
-				srcs/mandatory/ft_split.c				\
-				srcs/mandatory/get_cmd_path.c			\
-				srcs/mandatory/path_parsing_utils.c		\
-				srcs/mandatory/ft_free.c				\
-				srcs/mandatory/error_handler.c			\
-				
-SRCS_B =		srcs/bonus/pipex.c					\
-				srcs/bonus/process_exec.c			\
-				srcs/bonus/ft_split.c				\
-				srcs/bonus/get_cmd_path.c			\
-				srcs/bonus/utils.c					\
-				srcs/bonus/ft_free.c				\
-				srcs/bonus/error_handler.c			\
-				srcs/bonus/get_next_line.c			\
-				srcs/bonus/get_next_line_utils.c	\
-				srcs/bonus/init.c					\
+# ################################## #
+#               COMMAND              #
+# ################################## #
+CC			= gcc
+MKDIR		= mkdir -p
+RM			= rm -rf
 
-OBJS	= ${SRCS:.c=.o}
+# ################################## #
+#              EXEC NAME             #
+# ################################## #
+NAME		= pipex
 
-OBJS_B	= ${SRCS_B:.c=.o}
+# ################################## #
+#               SOURCES              #
+# ################################## #
+C_DIR		= srcs/mandatory
+C_DIR_B		= srcs/bonus/
 
-CFLAGS	= -Wall -Werror -Wextra -g
+C_FILES		=	pipex.c 				\
+				init.c					\
+				ft_split.c				\
+				get_cmd_path.c			\
+				path_parsing_utils.c	\
+				ft_free.c				\
+				error_handler.c			\
 
-CC		= gcc
+C_FILES_B	=	pipex.c					\
+				process_exec.c			\
+				ft_split.c				\
+				get_cmd_path.c			\
+				utils.c					\
+				ft_free.c				\
+				error_handler.c			\
+				get_next_line.c			\
+				get_next_line_utils.c	\
+				init.c					\
 
-RM		= rm -f
+SRCS		= $(patsubst %, $(C_DIR)/%, $(C_FILES))
+SRCS_B		= $(patsubst %, $(C_DIR_B)/%, $(C_FILES_B))
 
-INCS    = includes
+# ################################## #
+#               OBJECTS              #
+# ################################## #
+O_DIR		= objs
 
-all:	${NAME}
+O_FILES		= $(C_FILES:.c=.o)
+O_FILES_B	= $(C_FILES_B:.c=.o)
 
-.c.o:
-		@$(CC) ${CFLAGS} -I$(INCS) -c $< -o $@
+OBJS		= $(patsubst %, $(O_DIR)/%, $(O_FILES))
+OBJS_B		= $(patsubst %, $(O_DIR)/%, $(O_FILES_B))
 
-${NAME}:	${OBJS} ${MLX}
-		@${CC} ${CFLAGS} ${OBJS} -o pipex
-		@printf "%s\e[0;32m pipex : Compiling object file into executable\n\e[0m" "-"
+# ################################## #
+#                FLAGS               #
+# ################################## #
+CFLAGS		= -Wall -Wextra -Werror -g
 
-bonus: ${OBJS_B}
-		${CC} ${CFLAGS} ${OBJS_B} -I$(INCS) -o pipex
-		@printf "%s\e[0;32m pipex : Compiling bonus object file into executable\n\e[0m" "-"
+CINCLUDES	= -I ./includes \
+
+# ################################## #
+#                RULES               #
+# ################################## #
+
+all:		$(NAME)
+
+$(NAME):	$(O_DIR) $(OBJS)
+			@$(CC) $(CFLAGS) $(OBJS) -o $@
+			@echo "${GREEN}- compiling pipex executable${RESET}"
+
+bonus:		$(O_DIR) $(OBJS_B)
+			@$(CC) $(CFLAGS) $(OBJS_B) -o $@
+			@echo "${GREEN}- compiling bonus executable${RESET}"
+
+$(O_DIR)/%.o: $(C_DIR)/%.c
+			@$(CC) $(CFLAGS) $(CINCLUDES) -c $< -o $@
+
+$(O_DIR):
+			@$(MKDIR) $(O_DIR)
+			@echo "${GREEN}- creating pipex objects directory${RESET}"
+
+# ################################## #
+#                CLEAN               #
+# ################################## #
 
 clean:
-		@${RM} ${OBJS}
-		@${RM} ${OBJS_B}
-		@printf "%s\e[0;31m pipex : Delete all object files\n\e[0m" "-"
+			@$(RM) $(O_DIR)
+			@echo "${RED}- deleting pipex objects${RESET}"
 
-fclean:
-		@${RM} ${OBJS}
-		@${RM} ${OBJS_B}
-		@printf "%s\e[0;31m pipex : Delete all object files\n\e[0m" "-"
-		@${RM} ${NAME}
-		@printf "%s\e[0;31m pipex : Delete executable\n\e[0m" "-"
+fclean:		clean
+			@$(RM) $(NAME)
+			@echo "${RED}- delete pipex executable${RESET}"
 
-re: fclean ${NAME}
+re:			fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all check clean fclean re
