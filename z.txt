@@ -1,0 +1,7 @@
+includes
+Makefile
+Makefile2
+pipex
+srcs
+x.txt
+z.txt

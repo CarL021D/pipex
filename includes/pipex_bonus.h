@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/20 01:02:05 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 01:00:23 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	error_no_path(t_cmd *s_cmd, char *av, char **path, char **cmd, int i);
 
 //                  FREE
 void	free_cmd_line(t_cmd *s_cmd);
-void	free_double_tab(char **tab);
+void	free_pp_arr(char **tab);
 void	free_struct(t_cmd *s_cmd);
 void	free_pipe_arr(t_cmd *s_cmd, int i);
 void	free_pipe_and_pid_arr(int id, t_cmd *s_cmd, int count);

@@ -6,13 +6,13 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 23:05:14 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/19 18:52:04 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 01:00:23 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/pipex_bonus.h"
 
-void	free_double_tab(char **tab)
+void	free_pp_arr(char **tab)
 {
 	int		i;
 

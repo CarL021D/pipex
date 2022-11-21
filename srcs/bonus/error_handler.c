@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/20 01:25:24 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 01:00:23 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void	check_env(char **envp)
 
 void	error_no_path(t_cmd *s_cmd, char *av, char **path, char **cmd, int i)
 {
-	free_double_tab(path);
-	free_double_tab(cmd);
+	free_pp_arr(path);
+	free_pp_arr(cmd);
 	free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
 	free(s_cmd->pid_arr);
 	// free_execve_params(s_cmd);
