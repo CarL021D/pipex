@@ -6,7 +6,7 @@ void	init_cmd_struct(t_cmd *s_cmd)
 	s_cmd->cmd_path = NULL;
 }
 
-void	init_fd_in_or_out(int id, t_cmd *s_cmd, char **av)
+void	init_fd(int id, t_cmd *s_cmd, char **av)
 {
 	if (FD_IN == id)
 	{

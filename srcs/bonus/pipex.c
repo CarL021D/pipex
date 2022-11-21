@@ -6,13 +6,36 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:19 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 01:00:23 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 11:52:43 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/pipex_bonus.h"
 
 // Check if cmd exist inside the parent
+
+// static void	ft_putnbr_fd(int n, int fd)
+// {
+// 	long int	l;
+
+// 	l = n;
+// 	if (l < 0)
+// 	{
+// 		write(fd, "-", 1);
+// 		l = -l;
+// 	}
+// 	if (l >= 10)
+// 	{
+// 		ft_putnbr_fd(l / 10, fd);
+// 		ft_putnbr_fd(l % 10, fd);
+// 	}
+// 	else
+// 	{
+// 		l += 48;
+// 		write(fd, &l, 1);
+// 	}
+// }
+
 
 void	var_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 {
@@ -36,8 +59,11 @@ void	wait_for_child_process(t_cmd *s_cmd)
 }
 
 
+// void	exec_child_process(t_cmd *s_cmd, char **av)
 void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 {
+	if (s_cmd->fork_count == (s_cmd->nb_cmd - 1))
+		init_fd(FD_OUT, s_cmd, av, ac);
 	s_cmd->pid_arr[s_cmd->fork_count] = fork();
 	if (s_cmd->pid_arr[s_cmd->fork_count] == -1)
 		exit_error(FORK, s_cmd);
@@ -45,14 +71,18 @@ void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 	if (s_cmd->fork_count == 0)
 	{
 		if (s_cmd->here_doc)
-			here_doc_to_pipe_exec(s_cmd, av);
+			here_doc_to_pipe_exec(s_cmd);
+			// here_doc_to_pipe_exec(s_cmd, av);
 		else
-			fd_to_pipe_exec(s_cmd, av);
+			fd_to_pipe_exec(s_cmd);
 	}
 	else if (s_cmd->fork_count == (s_cmd->nb_cmd - 1))
 	{
+		// init_fd(FD_OUT, s_cmd, av, ac);
+		pipe_to_fd_exec(s_cmd);
 		// fd_out_init(s_cmd, ac , av);
-		pipe_to_fd_exec(s_cmd, av, ac);
+		
+		// pipe_to_fd_exec(s_cmd, av ,ac);
 	}	
 	else
 		pipe_to_pipe_exec(s_cmd);
@@ -60,14 +90,20 @@ void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 
 void	exec_parent_process(t_cmd *s_cmd)
 {
-	// free_struct(s_cmd);
-	close_fds(s_cmd, -1);
+	// // free_struct(s_cmd);
+	if (s_cmd->here_doc)
+		close_here_doc_fd(s_cmd);
+	else
+		close(s_cmd->fd_in);
+		// close(s_cmd->fd_in);
+	close(s_cmd->fd_out);
+	close_fds(s_cmd);
 	// if (s_cmd->here_doc)
 	// 	close_here_doc_fd(s_cmd);
 	free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
 	wait_for_child_process(s_cmd);
-	// free_execve_params(s_cmd);
 	free(s_cmd->pid_arr);
+
 	// waitpid(s_cmd->pid_arr[s_cmd->fork_count], NULL, 0);
 }
 
@@ -79,6 +115,36 @@ void	free_execve_params(t_cmd *s_cmd)
 		free_pp_arr(s_cmd->cmd_options);
 }
 
+void	init_fd(int id, t_cmd *s_cmd, char **av, int ac)
+{
+	if (FD_IN == id)
+	{
+		s_cmd->fd_in = open(av[1], O_RDONLY);
+		if (s_cmd->fd_in == -1)
+		{
+			perror("Open");
+			free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
+			free(s_cmd->pid_arr);
+			exit(EXIT_FAILURE);
+		}
+	}
+	if (FD_OUT == id)
+	{
+		if (s_cmd->here_doc)
+			s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (s_cmd->fd_out == -1)
+		{
+			perror("Open");
+			exit(EXIT_FAILURE);
+		}
+	}
+}
+
+
+
+
 int main(int ac, char **av, char **envp)
 {
 	t_cmd	s_cmd;
@@ -88,11 +154,16 @@ int main(int ac, char **av, char **envp)
 	// var_init(&s_cmd, ac, av, envp);
 	cmd_struct_init(&s_cmd, ac, av, envp);
 	pipe_arr_init(&s_cmd);
+	if (s_cmd.here_doc)
+		set_here_doc(&s_cmd, av);
+	else
+		init_fd(FD_IN, &s_cmd, av, ac);
 	while (s_cmd.fork_count < s_cmd.nb_cmd)
 	{
 		s_cmd.cmd_path = get_command_path(&s_cmd, 
 			av[s_cmd.arg_index]);
-		s_cmd.cmd_options = ft_split(av[s_cmd.arg_index], ' ');		
+
+		s_cmd.cmd_options = ft_split(av[s_cmd.arg_index], ' ');
 		exec_child_process(&s_cmd, av, ac);
 		free_execve_params(&s_cmd);
 		s_cmd.fork_count++;

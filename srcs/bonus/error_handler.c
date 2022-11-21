@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 01:00:23 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 11:45:38 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	exit_if_not_enough_args(int ac, char **av)
 	}
 }
 
+
 void	check_env(char **envp)
 {
 	char	*path_env;
@@ -36,28 +37,53 @@ void	check_env(char **envp)
 	{
 		path_env = ft_strnstr(envp[i], "PATH=", 5);
 		if (path_env != NULL)
+		{
+			free(path_env);
 			return ;
+		}
 		i++;
 	}
 	write(2, "No environment\n", 16);
 }
 
-void	error_no_path(t_cmd *s_cmd, char *av, char **path, char **cmd, int i)
+
+
+void	path_error(t_cmd *s_cmd, char *av, char **path, char **cmd, int id)
 {
 	free_pp_arr(path);
 	free_pp_arr(cmd);
+	close(s_cmd->fd_in);
+	// close(s_cmd->fd_out);
 	free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
 	free(s_cmd->pid_arr);
-	// free_execve_params(s_cmd);
-	if (!path[i])
+	
+	if (PATH_ERROR == id)
 	{
 		write(2, "zsh: command not found: ", 24);
 		write(2, av, ft_strlen(av));
 		write(2, "\n", 1);
 	}
-	else
+	if (MALLOC == id)
 		perror("Malloc");
+	// exit(EXIT_FAILURE);
 }
+
+// void	path_error(t_cmd *s_cmd, char *av, char **path, char **cmd, int i)
+// {
+// 	free_pp_arr(path);
+// 	free_pp_arr(cmd);
+// 	free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
+// 	free(s_cmd->pid_arr);
+// 	// free_execve_params(s_cmd);
+// 	if (!path[i])
+// 	{
+// 		write(2, "zsh: command not found: ", 24);
+// 		write(2, av, ft_strlen(av));
+// 		write(2, "\n", 1);
+// 	}
+// 	else
+// 		perror("Malloc");
+// }
 
 void	exit_error(int id, t_cmd *s_cmd)
 {

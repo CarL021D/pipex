@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 01:15:57 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 02:50:50 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ char	*get_command_path(t_cmd *s_cmd, char *av, char **envp)
 	split_path = ft_split(path_env, ':');
 	free(path_env);
 	cmd = ft_split(av, ' ');
-	write(2, cmd[0], ft_strlen(cmd[0]));
 	i = -1;
 	while (split_path[++i])
 	{
@@ -99,7 +98,7 @@ char	*get_command_path(t_cmd *s_cmd, char *av, char **envp)
 			return (free_pp_arr(split_path), free_pp_arr(cmd), cmd_path);
 		free(cmd_path);
 	}
-	path_error(s_cmd, av, split_path, cmd, NO_PATH);
+	path_error(s_cmd, av, split_path, cmd, PATH_ERROR);
 	exit(EXIT_FAILURE);
 	// free_pp_arr(split_path);
 	// free_pp_arr(cmd);
