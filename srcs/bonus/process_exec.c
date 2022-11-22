@@ -6,33 +6,11 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:47:31 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 09:36:46 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 11:08:52 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/pipex_bonus.h"
-
-static void	ft_putnbr_fd(int n, int fd)
-{
-	long int	l;
-
-	l = n;
-	if (l < 0)
-	{
-		write(fd, "-", 1);
-		l = -l;
-	}
-	if (l >= 10)
-	{
-		ft_putnbr_fd(l / 10, fd);
-		ft_putnbr_fd(l % 10, fd);
-	}
-	else
-	{
-		l += 48;
-		write(fd, &l, 1);
-	}
-}
 
 void	close_here_doc_fd(t_cmd *s_cmd)
 {
@@ -75,7 +53,7 @@ void	fd_to_pipe_exec(t_cmd *s_cmd)
 		// perror("Execve");
 		// exit(EXIT_FAILURE);
 	}
-	close(s_cmd->fd_in);
+	// close(s_cmd->fd_in);
 }
 
 
@@ -105,7 +83,7 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd)
 	// ft_putnbr_fd(s_cmd->fork_count, 2);
 	// write(2, "\n", 1);
 
-		// close_here_doc_fd(s_cmd);
+		close_here_doc_fd(s_cmd);
 		close_fds(s_cmd);
 		// close(s_cmd->pipe_here_doc[1]);
 		// close(s_cmd->pipe_here_doc[0]);
@@ -115,12 +93,11 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd)
 		// s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 		exit_error(EXECVE, s_cmd);
-			
-		ft_putnbr_fd(s_cmd->fork_count, 2);
+
 		// perror("Execve");
 		// exit(EXIT_FAILURE);
 	}
-	close_here_doc_fd(s_cmd);
+	// close_here_doc_fd(s_cmd);
 }
 
 
@@ -166,10 +143,10 @@ void	pipe_to_fd_exec(t_cmd *s_cmd)
 			exit_error(DUP2, s_cmd);
 			// exit_if_failed_dup();
 
-		// if (s_cmd->here_doc)
-		// 	close_here_doc_fd(s_cmd);
-		// else
-		// 	close(s_cmd->fd_in);
+		if (s_cmd->here_doc)
+			close_here_doc_fd(s_cmd);
+		else
+			close(s_cmd->fd_in);
 		// close(s_cmd->fd_in);
 
 

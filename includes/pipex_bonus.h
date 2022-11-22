@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 11:41:20 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 10:36:07 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,6 @@ void	free_execve_params(t_cmd *s_cmd);
 
 //					GET NEXT LINE
 char	*get_next_line(int fd);
+// char    *get_next_line(int fd, int options)
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:19 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 08:59:03 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 11:07:03 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	exec_parent_process(t_cmd *s_cmd)
 		close_here_doc_fd(s_cmd);
 	else
 		close(s_cmd->fd_in);
-		// close(s_cmd->fd_in);
 	close(s_cmd->fd_out);
 	close_fds(s_cmd);
 	// if (s_cmd->here_doc)

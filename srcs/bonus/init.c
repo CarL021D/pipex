@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:04 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 09:11:17 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 10:35:30 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 		write(s_cmd->pipe_here_doc[1], line, ft_strlen(line));
 		free(line);
 	}
-	
+	// get_next_line(0, 1);
 	// free(line);
 	// s_cmd->fd_in = s_cmd->pipe_here_doc[0];
 	// close(s_cmd->pipe_here_doc[0]);
