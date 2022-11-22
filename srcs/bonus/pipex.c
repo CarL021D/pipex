@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:19 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 12:06:42 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 19:40:54 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,6 @@
 // 	}
 // }
 
-
-void	var_init(t_cmd *s_cmd, int ac, char **av, char **envp)
-{
-	cmd_struct_init(s_cmd, ac, av, envp);
-	pipe_arr_init(s_cmd);
-	// if (s_cmd->here_doc)
-	// 	set_here_doc(s_cmd, av);
-}
-
 void	wait_for_child_process(t_cmd *s_cmd)
 {
 	int		i;
@@ -63,7 +54,8 @@ void	wait_for_child_process(t_cmd *s_cmd)
 void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 {
 	if (s_cmd->fork_count == (s_cmd->nb_cmd - 1))
-		init_fd(FD_OUT, s_cmd, av, ac);
+		fd_out_init(s_cmd, ac, av);
+		// init_fd(FD_OUT, s_cmd, av, ac);
 	s_cmd->pid_arr[s_cmd->fork_count] = fork();
 	if (s_cmd->pid_arr[s_cmd->fork_count] == -1)
 		exit_error(FORK, s_cmd);
@@ -76,13 +68,10 @@ void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 			fd_to_pipe_exec(s_cmd);
 	}
 	else if (s_cmd->fork_count == (s_cmd->nb_cmd - 1))
-	{
-		// init_fd(FD_OUT, s_cmd, av, ac);
 		pipe_to_fd_exec(s_cmd);
+		// init_fd(FD_OUT, s_cmd, av, ac);
 		// fd_out_init(s_cmd, ac , av);
-		
 		// pipe_to_fd_exec(s_cmd, av ,ac);
-	}	
 	else
 		pipe_to_pipe_exec(s_cmd);
 }
@@ -94,7 +83,9 @@ void	exec_parent_process(t_cmd *s_cmd)
 		close_here_doc_fd(s_cmd);
 	else
 		close(s_cmd->fd_in);
-	close(s_cmd->fd_out);
+	// if (s_cmd->cmd_path)
+	if (s_cmd->fd_out)
+		close(s_cmd->fd_out);
 	close_fds(s_cmd);
 	// if (s_cmd->here_doc)
 	// 	close_here_doc_fd(s_cmd);
@@ -113,38 +104,46 @@ void	free_execve_params(t_cmd *s_cmd)
 		free_pp_arr(s_cmd->cmd_options);
 }
 
-void	init_fd(int id, t_cmd *s_cmd, char **av, int ac)
-{
-	if (FD_IN == id)
-	{
-		s_cmd->fd_in = open(av[1], O_RDONLY);
-		if (s_cmd->fd_in == -1)
-		{
-			close_fds(s_cmd);
-			free_struct(s_cmd);
-			exit_error(OPEN, s_cmd);
-		}
-	}
-	if (FD_OUT == id)
-	{
-		if (s_cmd->here_doc)
-			s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (s_cmd->fd_out == -1)
-		{
-			if (s_cmd->here_doc)
-				close_here_doc_fd(s_cmd);
-			else
-				close(s_cmd->fd_in);
-			close_fds(s_cmd);
-			free_struct(s_cmd);
-			free_execve_params(s_cmd);
-			exit_error(OPEN, s_cmd);
-		}
-	}
-}
+// void	init_fd(int id, t_cmd *s_cmd, char **av, int ac)
+// {
+// 	if (FD_IN == id)
+// 	{
+// 		s_cmd->fd_in = open(av[1], O_RDONLY);
+// 		if (s_cmd->fd_in == -1)
+// 		{
+// 			close_fds(s_cmd);
+// 			free_struct(s_cmd);
+// 			exit_error(OPEN, s_cmd);
+// 		}
+// 	}
+// 	if (FD_OUT == id)
+// 	{
+// 		if (s_cmd->here_doc)
+// 			s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+// 		else
+// 			s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 		if (s_cmd->fd_out == -1)
+// 		{
+// 			if (s_cmd->here_doc)
+// 				close_here_doc_fd(s_cmd);
+// 			else
+// 				close(s_cmd->fd_in);
+// 			close_fds(s_cmd);
+// 			free_struct(s_cmd);
+// 			free_execve_params(s_cmd);
+// 			exit_error(OPEN, s_cmd);
+// 		}
+// 	}
+// }
 
+
+// static void	check_path(t_cmd *s_cmd, char **av);
+// {
+	
+
+
+	
+// }
 
 
 
@@ -153,20 +152,21 @@ int main(int ac, char **av, char **envp)
 	t_cmd	s_cmd;
 
 	exit_if_not_enough_args(ac, av);
-	check_env(envp);
-	// var_init(&s_cmd, ac, av, envp);
+	// check_env(envp);
 	cmd_struct_init(&s_cmd, ac, av, envp);
 	pipe_arr_init(&s_cmd);
 	if (s_cmd.here_doc)
 		set_here_doc(&s_cmd, av);
 	else
-		init_fd(FD_IN, &s_cmd, av, ac);
+		fd_in_init(&s_cmd, av);
+		// init_fd(FD_IN, &s_cmd, av, ac);
 	while (s_cmd.fork_count < s_cmd.nb_cmd)
 	{
-		s_cmd.cmd_path = get_command_path(&s_cmd, 
-			av[s_cmd.arg_index]);
+		// check_path(&s_cmd, av);
+		s_cmd.cmd_path = get_cmd_path(&s_cmd, av[s_cmd.arg_index]);
 		s_cmd.cmd_options = ft_split(av[s_cmd.arg_index], ' ');
-		exec_child_process(&s_cmd, av, ac);
+		if (s_cmd.cmd_path != NULL)
+			exec_child_process(&s_cmd, av, ac);
 		free_execve_params(&s_cmd);
 		s_cmd.fork_count++;
 		s_cmd.arg_index++;

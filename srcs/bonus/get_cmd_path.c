@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 08:48:51 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 19:01:03 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,13 @@ static char	*cmd_env_path_line(t_cmd *s_cmd)
 			return (path_env);
 		i++;
 	}
-	perror("No env");
-	exit(EXIT_FAILURE);
+	return (NULL);
+
+	// perror("No env");
+	// exit(EXIT_FAILURE);
 }
 
-char	*get_command_path(t_cmd *s_cmd, char *av)
+char	*get_cmd_path(t_cmd *s_cmd, char *av)
 {
 	char	**split_path;
 	char	**cmd;
@@ -86,27 +88,16 @@ char	*get_command_path(t_cmd *s_cmd, char *av)
 	char	*path_env;
 	int		i;
 
+	cmd = ft_split(av, ' ');
 	path_env = cmd_env_path_line(s_cmd);
+	if (!path_env)
+	{
+		if (access(cmd[0], F_OK | X_OK) == 0)
+			return(cmd[0]);
+		return (perror("Access error"), NULL);
+	}
 	split_path = ft_split(path_env, ':');
 	free(path_env);
-	cmd = ft_split(av, ' ');
-	
-	// 	i = 0;
-	// while (split_path[i])
-	// {
-	// 	cmd_path = join_slash_and_comd_to_path(split_path[i], cmd[0]);
-	// 	if (!cmd_path)
-	// 		break;
-	// 	if (access(cmd_path, F_OK | X_OK) == 0 && !(cmd[0][0] == '/'))
-	// 		return (free_pp_arr(split_path),
-	// 			free_pp_arr(cmd), cmd_path);
-	// 	free(cmd_path);
-	// 	i++;
-	// }
-	// path_error(s_cmd, av, split_path, cmd, i);
-	// exit(EXIT_FAILURE);
-	
-	
 	i = -1;
 	while (split_path[++i])
 	{
@@ -124,6 +115,20 @@ char	*get_command_path(t_cmd *s_cmd, char *av)
 	}
 	path_error(s_cmd, av, split_path, cmd, PATH_ERROR);
 	exit(EXIT_FAILURE);
+	// 	i = 0;
+	// while (split_path[i])
+	// {
+	// 	cmd_path = join_slash_and_comd_to_path(split_path[i], cmd[0]);
+	// 	if (!cmd_path)
+	// 		break;
+	// 	if (access(cmd_path, F_OK | X_OK) == 0 && !(cmd[0][0] == '/'))
+	// 		return (free_pp_arr(split_path),
+	// 			free_pp_arr(cmd), cmd_path);
+	// 	free(cmd_path);
+	// 	i++;
+	// }
+	// path_error(s_cmd, av, split_path, cmd, i);
+	// exit(EXIT_FAILURE);
 
 
 

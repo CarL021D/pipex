@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 12:13:23 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 19:06:15 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,15 @@ typedef struct s_cmd
 	int		fd_out;
 	char	*cmd_path;
 	char	**cmd_options;
+	char	**envp;
 }	t_cmd;
 
 //					PIPEX
-char	*get_command_path(t_cmd *s_cmd, char *av, char **envp);
+char	*get_cmd_path(t_cmd *s_cmd, char *av);
 
 //					INIT
-void	init_cmd_struct(t_cmd *s_cmd);
+// void	init_cmd_struct(t_cmd *s_cmd);
+void	init_cmd_struct(t_cmd *s_cmd, char **envp);
 void	init_fd(int id, t_cmd *s_cmd, char **av);
 
 //					UTILS

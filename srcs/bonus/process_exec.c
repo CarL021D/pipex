@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:47:31 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 11:11:57 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 17:05:19 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	fd_to_pipe_exec(t_cmd *s_cmd)
 		close(s_cmd->fd_in);
 		close_fds(s_cmd);
 		
-		// s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+		// s_cmd->cmd_path = get_cmd_path(s_cmd, av[s_cmd->arg_index]);
 		// s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 		exit_error(EXECVE, s_cmd);
@@ -89,7 +89,7 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd)
 		// close(s_cmd->pipe_here_doc[0]);
 
 		// close_fds(s_cmd, FD_IN);
-		// s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+		// s_cmd->cmd_path = get_cmd_path(s_cmd, av[s_cmd->arg_index]);
 		// s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 		exit_error(EXECVE, s_cmd);
@@ -121,7 +121,7 @@ void	pipe_to_pipe_exec(t_cmd *s_cmd)
 		// 	close(s_cmd->fd_in);
 		close_fds(s_cmd);
 
-		// s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+		// s_cmd->cmd_path = get_cmd_path(s_cmd, av[s_cmd->arg_index]);
 		// s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 		exit_error(EXECVE, s_cmd);
@@ -157,7 +157,7 @@ void	pipe_to_fd_exec(t_cmd *s_cmd)
 		// ft_putnbr_fd(s_cmd->fork_count, 2);
 		// write(2, "\n", 1);
 		
-		// s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+		// s_cmd->cmd_path = get_cmd_path(s_cmd, av[s_cmd->arg_index]);
 		// s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 		exit_error(EXECVE, s_cmd);
@@ -190,7 +190,7 @@ void	pipe_to_fd_exec(t_cmd *s_cmd)
 // 		if (dup2(s_cmd->pipe_[1], STDOUT_FILENO) == -1)
 // 			exit_if_failed_dup();
 // 		close(s_cmd->pipe_[1]);
-// 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+// 		s_cmd->cmd_path = get_cmd_path(s_cmd, av[s_cmd->arg_index]);
 // 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');		
 // 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 // 		perror("Execve");
@@ -218,7 +218,7 @@ void	pipe_to_fd_exec(t_cmd *s_cmd)
 // 			exit_if_failed_dup();
 // 		close(s_cmd->pipe_here_doc[0]);
 // 		close(s_cmd->pipe_[1]);
-// 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+// 		s_cmd->cmd_path = get_cmd_path(s_cmd, av[s_cmd->arg_index]);
 // 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 // 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 // 		perror("Execve");
@@ -250,7 +250,7 @@ void	pipe_to_fd_exec(t_cmd *s_cmd)
 // 		close(s_cmd->temp_pipe[0]);
 // 		close(s_cmd->temp_pipe[1]);
 // 		close(s_cmd->pipe_[1]);
-// 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+// 		s_cmd->cmd_path = get_cmd_path(s_cmd, av[s_cmd->arg_index]);
 // 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');		
 // 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 // 		perror("Execve");
@@ -272,7 +272,7 @@ void	pipe_to_fd_exec(t_cmd *s_cmd)
 // 			exit_if_failed_dup();
 // 		close(s_cmd->pipe_[0]);
 // 		close(s_cmd->fd_out);
-// 		s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
+// 		s_cmd->cmd_path = get_cmd_path(s_cmd, av[s_cmd->arg_index]);
 // 		s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 // 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
 // 		perror("Execve");

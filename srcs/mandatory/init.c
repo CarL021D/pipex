@@ -6,16 +6,17 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:04:43 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 14:04:52 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 19:03:29 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	init_cmd_struct(t_cmd *s_cmd)
+void	init_cmd_struct(t_cmd *s_cmd, char **envp)
 {
 	s_cmd->cmd_path = NULL;
 	s_cmd->cmd_path = NULL;
+	s_cmd->envp = envp;
 }
 
 void	init_fd(int id, t_cmd *s_cmd, char **av)

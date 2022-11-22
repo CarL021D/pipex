@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 02:50:50 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 19:05:49 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,23 +57,24 @@ char	*path_str(char *full_path)
 	return (path);
 }
 
-static char	*cmd_env_path_line(char **envp)
+static char	*cmd_env_path_line(t_cmd *s_cmd)
 {
 	char	*path_env;
 	int		i;
 
 	i = 0;
-	while (envp[i])
+	while (s_cmd->envp[i])
 	{
-		path_env = ft_strnstr(envp[i], "PATH=", 5);
+		path_env = ft_strnstr(s_cmd->envp[i], "PATH=", 5);
 		if (path_env)
 			return (path_env);
 		i++;
 	}
-	exit(EXIT_FAILURE);
+	return (NULL);
+	// exit(EXIT_FAILURE);
 }
 
-char	*get_command_path(t_cmd *s_cmd, char *av, char **envp)
+char	*get_cmd_path(t_cmd *s_cmd, char *av)
 {
 	char	**split_path;
 	char	**cmd;
@@ -81,10 +82,16 @@ char	*get_command_path(t_cmd *s_cmd, char *av, char **envp)
 	char	*path_env;
 	int		i;
 
-	path_env = cmd_env_path_line(envp);
+	cmd = ft_split(av, ' ');
+	path_env = cmd_env_path_line(s_cmd);
+	if (!path_env)
+	{
+		if (access(cmd[0], F_OK | X_OK) == 0)
+			return(cmd[0]);
+		return (perror("Access error"), NULL);
+	}
 	split_path = ft_split(path_env, ':');
 	free(path_env);
-	cmd = ft_split(av, ' ');
 	i = -1;
 	while (split_path[++i])
 	{
@@ -100,6 +107,19 @@ char	*get_command_path(t_cmd *s_cmd, char *av, char **envp)
 	}
 	path_error(s_cmd, av, split_path, cmd, PATH_ERROR);
 	exit(EXIT_FAILURE);
+
+
+
+
+
+
+
+
+
+
+
+
+	
 	// free_pp_arr(split_path);
 	// free_pp_arr(cmd);
 	// free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);

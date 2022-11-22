@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 14:33:52 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 18:12:09 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@
 #include <sys/wait.h>
 #include <sys/errno.h>
 
-# define FD_IN 0
-# define FD_OUT 1
 # define BUFFER_SIZE 10
 # define MALLOC 100
 # define FORK 101
@@ -54,10 +52,11 @@ typedef struct s_cmd
 }	t_cmd;
 
 //                  PIPEX
-char	*get_command_path(t_cmd *s_cmd, char *av);
+// char	*get_cmd_path(t_cmd *s_cmd, char *av, char **envp);
+char	*get_cmd_path(t_cmd *s_cmd, char *av);
 void	exit_if_not_enough_args(int ac, char **av);
-void	init_fd(int id, t_cmd *s_cmd, char **av, int ac);
-// void	fd_in_init(t_cmd *s_cmd, char **av);
+// void	init_fd(int id, t_cmd *s_cmd, char **av, int ac);
+void	fd_in_init(t_cmd *s_cmd, char **av);
 void	fd_out_init(t_cmd *s_cmd, int ac, char **av);
 // void	close_fds(t_cmd *s_cmd, int fd);
 void	close_fds(t_cmd *s_cmd);
@@ -83,7 +82,7 @@ void	pipe_to_fd_exec(t_cmd *s_cmd);
 
 
 
-//                  UTILS
+//					UTILS
 size_t	ft_strlen(char *str);
 char	**ft_split(char *str, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
@@ -91,14 +90,14 @@ char	*path_str(char *full_path);
 char	*ft_strnstr(char *full_path, const char *s2, size_t n);
 int		ft_strcmp(char *s1, char *s2);
 
-//                  ERROR
+//					ERROR
 void	check_env(char **envp);
 void	exit_error(int id, t_cmd *s_cmd);
 void	path_error(t_cmd *s_cmd, char *av, char **path, char **cmd, int id);
 // void	exit_if_failed_dup(void);
 // void	exit_if_failed_fork(t_cmd *s_cmd);
 
-//                  FREE
+//					FREE
 void	free_cmd_line(t_cmd *s_cmd);
 void	free_pp_arr(char **tab);
 void	free_struct(t_cmd *s_cmd);

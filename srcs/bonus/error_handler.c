@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 09:45:41 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 17:43:19 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,24 @@ void	exit_if_not_enough_args(int ac, char **av)
 }
 
 
-void	check_env(char **envp)
-{
-	char	*path_env;
-	int		i;
+// void	check_env(char **envp)
+// {
+// 	char	*path_env;
+// 	int		i;
 
-	i = 0;
-	while (envp[i])
-	{
-		path_env = ft_strnstr(envp[i], "PATH=", 5);
-		if (path_env != NULL)
-		{
-			free(path_env);
-			return ;
-		}
-		i++;
-	}
-	write(2, "No environment\n", 16);
-}
+// 	i = 0;
+// 	while (envp[i])
+// 	{
+// 		path_env = ft_strnstr(envp[i], "PATH=", 5);
+// 		if (path_env != NULL)
+// 		{
+// 			free(path_env);
+// 			return ;
+// 		}
+// 		i++;
+// 	}
+// 	write(2, "No environment\n", 16);
+// }
 
 
 
