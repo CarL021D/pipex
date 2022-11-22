@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 10:21:19 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 20:08:21 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ void	path_error(t_cmd *s_cmd, char *av, char **path, char **cmd, int id)
 	free_pp_arr(path);
 	free_pp_arr(cmd);
 	close(s_cmd->fd_in);
-	close(s_cmd->fd_out);
+	// if (s_cmd->fd_out)
+	// close(s_cmd->fd_out);
 	close(s_cmd->pipe_[0]);
 	close(s_cmd->pipe_[1]);
 	if (PATH_ERROR == id)

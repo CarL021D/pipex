@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:01:46 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 17:28:46 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 21:05:59 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,7 @@ char	**ft_split(char *str, char c)
 			j++;
 		arr[i] = ft_malloc_word(str + j, c);
 		if (!arr[i])
-		{
-			free_tab(arr, i);
-			return (NULL);
-		}
+			return (free_tab(arr, i), NULL);
 		j += ft_word_len(str + j, c);
 	}
 	arr[i] = NULL;

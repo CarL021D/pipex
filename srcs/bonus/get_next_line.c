@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 00:10:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 17:02:32 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 21:04:43 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,21 +190,19 @@ char    *get_next_line(int fd, int id)
 
         if (CLEAN == id)
                 return (gnl_cleaner(stash, line), NULL);
-        else
+
+        if (fd < 0)
+                return (NULL);
+        read_char = 1;
+        while (read_char && !still_on_line(stash))
         {
-                if (fd < 0)
+                read_char = read(fd, buffer, BUFFER_SIZE);
+                if (read_char == -1)
+                        return (free(stash), NULL);
+                buffer[read_char] = '\0';
+                stash = join_stash_to_buffer(stash, buffer);
+                if (!stash)
                         return (NULL);
-                read_char = 1;
-                while (read_char && !still_on_line(stash))
-                {
-                        read_char = read(fd, buffer, BUFFER_SIZE);
-                        if (read_char == -1)
-                                return (free(stash), NULL);
-                        buffer[read_char] = '\0';
-                        stash = join_stash_to_buffer(stash, buffer);
-                        if (!stash)
-                                return (NULL);
-                }
         }
         line = ft_get_line(stash);
         stash = ft_set_stash(stash);
