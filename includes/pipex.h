@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 10:14:55 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 12:13:23 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ typedef struct s_cmd
 	int		fd_in;
 	int		fd_out;
 	char	*cmd_path;
-	char	*cmd2_path;
 	char	**cmd_options;
-	char	**cmd2_options;
 }	t_cmd;
 
 //					PIPEX

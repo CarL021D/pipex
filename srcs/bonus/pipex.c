@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:19 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 11:07:03 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 12:06:42 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,9 @@ void	init_fd(int id, t_cmd *s_cmd, char **av, int ac)
 		s_cmd->fd_in = open(av[1], O_RDONLY);
 		if (s_cmd->fd_in == -1)
 		{
-			perror("Open");
-			free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
-			free(s_cmd->pid_arr);
-			exit(EXIT_FAILURE);
+			close_fds(s_cmd);
+			free_struct(s_cmd);
+			exit_error(OPEN, s_cmd);
 		}
 	}
 	if (FD_OUT == id)
@@ -134,8 +133,14 @@ void	init_fd(int id, t_cmd *s_cmd, char **av, int ac)
 			s_cmd->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (s_cmd->fd_out == -1)
 		{
-			perror("Open");
-			exit(EXIT_FAILURE);
+			if (s_cmd->here_doc)
+				close_here_doc_fd(s_cmd);
+			else
+				close(s_cmd->fd_in);
+			close_fds(s_cmd);
+			free_struct(s_cmd);
+			free_execve_params(s_cmd);
+			exit_error(OPEN, s_cmd);
 		}
 	}
 }
@@ -152,7 +157,6 @@ int main(int ac, char **av, char **envp)
 	// var_init(&s_cmd, ac, av, envp);
 	cmd_struct_init(&s_cmd, ac, av, envp);
 	pipe_arr_init(&s_cmd);
-	
 	if (s_cmd.here_doc)
 		set_here_doc(&s_cmd, av);
 	else
