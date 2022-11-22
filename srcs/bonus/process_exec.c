@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:47:31 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 11:26:54 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 08:47:57 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,9 @@ void	here_doc_to_pipe_exec(t_cmd *s_cmd)
 		// s_cmd->cmd_path = get_command_path(s_cmd, av[s_cmd->arg_index]);
 		// s_cmd->cmd_options = ft_split(av[s_cmd->arg_index], ' ');
 		execve(s_cmd->cmd_path, s_cmd->cmd_options, s_cmd->envp);
-			ft_putnbr_fd(s_cmd->fork_count, 2);
+		exit_error(EXECVE, s_cmd);
+			
+		ft_putnbr_fd(s_cmd->fork_count, 2);
 		// perror("Execve");
 		// exit(EXIT_FAILURE);
 	}

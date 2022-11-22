@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:04 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 10:42:57 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 09:11:17 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,19 @@ void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp)
 	{
 		s_cmd->here_doc = 1;
 		s_cmd->nb_cmd = ac - 4;
-		s_cmd->arg_index = 3;
+		// s_cmd->arg_index = 3;
 
 	}
 	else
 	{
 		s_cmd->here_doc = 0;
 		s_cmd->nb_cmd = ac - 3;
-		s_cmd->arg_index = 2;
+		// s_cmd->arg_index = 2;
 	}
-	// s_cmd->arg_index = 2;
+	s_cmd->arg_index = 2;
+	
 	s_cmd->envp = envp;
 	s_cmd->fork_count = 0;
-	// if (pipe(s_cmd->pipe_) == -1)
-	// 	return ;
-	// if (pipe(s_cmd->temp_pipe))
-	// 	return ;
 	s_cmd->cmd_path = NULL;
 	s_cmd->cmd_options = NULL;
 	s_cmd->pid_arr = malloc(sizeof(pid_t) * s_cmd->nb_cmd);
@@ -149,10 +146,12 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 		write(s_cmd->pipe_here_doc[1], line, ft_strlen(line));
 		free(line);
 	}
+	
 	// free(line);
 	// s_cmd->fd_in = s_cmd->pipe_here_doc[0];
 	// close(s_cmd->pipe_here_doc[0]);
 	// close(s_cmd->pipe_here_doc[1]);
 	free(delimeter);
+	// get_next_line(delimeter);
 	s_cmd->arg_index++;
 }

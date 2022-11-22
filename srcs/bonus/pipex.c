@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:19 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 11:52:43 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 08:59:03 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	exec_child_process(t_cmd *s_cmd, char **av, int ac)
 	{
 		if (s_cmd->here_doc)
 			here_doc_to_pipe_exec(s_cmd);
-			// here_doc_to_pipe_exec(s_cmd, av);
 		else
 			fd_to_pipe_exec(s_cmd);
 	}
@@ -154,6 +153,7 @@ int main(int ac, char **av, char **envp)
 	// var_init(&s_cmd, ac, av, envp);
 	cmd_struct_init(&s_cmd, ac, av, envp);
 	pipe_arr_init(&s_cmd);
+	
 	if (s_cmd.here_doc)
 		set_here_doc(&s_cmd, av);
 	else
@@ -162,7 +162,6 @@ int main(int ac, char **av, char **envp)
 	{
 		s_cmd.cmd_path = get_command_path(&s_cmd, 
 			av[s_cmd.arg_index]);
-
 		s_cmd.cmd_options = ft_split(av[s_cmd.arg_index], ' ');
 		exec_child_process(&s_cmd, av, ac);
 		free_execve_params(&s_cmd);
