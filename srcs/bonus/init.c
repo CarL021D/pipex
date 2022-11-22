@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:48:04 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 10:35:30 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 14:32:07 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,13 +140,14 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 	while (1)
 	{
 		write(1, "pipe heredoc> ", 14);
-		line = get_next_line(STDIN_FILENO);
+		line = get_next_line(STDIN_FILENO, RUN);
+		// line = get_next_line(STDIN_FILENO);
 		if (!line || ft_strcmp(line, delimeter))
 			break;
 		write(s_cmd->pipe_here_doc[1], line, ft_strlen(line));
 		free(line);
 	}
-	// get_next_line(0, 1);
+	get_next_line(0, CLEAN);
 	// free(line);
 	// s_cmd->fd_in = s_cmd->pipe_here_doc[0];
 	// close(s_cmd->pipe_here_doc[0]);

@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 10:36:07 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 14:33:52 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@
 # define OPEN 104
 # define PIPE 105
 # define PATH_ERROR 105
+# define RUN 200
+# define CLEAN 201	
+
 
 typedef struct s_cmd
 {
@@ -104,7 +107,7 @@ void	free_pipe_and_pid_arr(int id, t_cmd *s_cmd, int count);
 void	free_execve_params(t_cmd *s_cmd);
 
 //					GET NEXT LINE
-char	*get_next_line(int fd);
-// char    *get_next_line(int fd, int options)
+// char	*get_next_line(int fd);
+char    *get_next_line(int fd, int id);
 
 #endif

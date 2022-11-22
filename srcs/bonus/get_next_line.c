@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 00:10:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 10:35:49 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 14:44:38 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,30 +175,67 @@ char    *ft_set_stash(char *stash)
                 return (free(stash), NULL);
 }
 
-char    *get_next_line(int fd)
+static void    gnl_cleaner(char *stash, char *line)
+{
+        free(stash);
+        free(line);
+}
+
+char    *get_next_line(int fd, int id)
 {
         static char             *stash;
-        char                    *buffer;
-        int                             read_char;
-        char                    *line;
+        static char             *line;
+        char                    buffer[BUFFER_SIZE];
+        int                     read_char;
 
-        if (fd < 0 || BUFFER_SIZE <= 0)
-                return (NULL);
-        buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
-        if (!buffer)
-                return (NULL);
-        read_char = 1;
-        while (read_char && !still_on_line(stash))
+        if (CLEAN == id)
+                return (gnl_cleaner(stash, line), NULL);
+        else
         {
-                read_char = read(fd, buffer, BUFFER_SIZE);
-                if (read_char == -1)
-                        return (free(stash), free(buffer), NULL);
-                buffer[read_char] = '\0';
-                stash = join_stash_to_buffer(stash, buffer);
-                if (!stash)
-                        return (free(buffer), NULL);
+                if (fd < 0)
+                        return (NULL);
+                read_char = 1;
+                while (read_char && !still_on_line(stash))
+                {
+                        read_char = read(fd, buffer, BUFFER_SIZE);
+                        if (read_char == -1)
+                                return (free(stash), NULL);
+                        buffer[read_char] = '\0';
+                        stash = join_stash_to_buffer(stash, buffer);
+                        if (!stash)
+                                return (NULL);
+                }
         }
         line = ft_get_line(stash);
         stash = ft_set_stash(stash);
-        return (free(buffer), line);
+        return (line);
 }
+
+
+// char    *get_next_line(int fd)
+// {
+//         static char             *stash;
+//         char                    *buffer;
+//         int                             read_char;
+//         char                    *line;
+
+//         if (fd < 0 || BUFFER_SIZE <= 0)
+//                 return (NULL);
+//         buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
+//         if (!buffer)
+//                 return (NULL);
+//         read_char = 1;
+//         while (read_char && !still_on_line(stash))
+//         {
+//                 read_char = read(fd, buffer, BUFFER_SIZE);
+//                 if (read_char == -1)
+//                         return (free(stash), free(buffer), NULL);
+//                 buffer[read_char] = '\0';
+//                 stash = join_stash_to_buffer(stash, buffer);
+//                 if (!stash)
+//                         return (free(buffer), NULL);
+//         }
+//         line = ft_get_line(stash);
+//         stash = ft_set_stash(stash);
+//         return (free(buffer), line);
+// }
