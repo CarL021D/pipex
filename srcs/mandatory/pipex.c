@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 08:03:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/20 01:21:08 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 01:00:23 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	free_execve_params(t_cmd *s_cmd)
 	if (s_cmd->cmd_path != NULL)
 		free(s_cmd->cmd_path);
 	if (s_cmd->cmd_options != NULL)
-		free_double_tab(s_cmd->cmd_options);
+		free_pp_arr(s_cmd->cmd_options);
 }
 
 static void	exec_parent_process(t_cmd *s_cmd, int *pipe_)

@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/19 21:07:42 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 01:00:23 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define CHILD_2 2
 # define FD_IN 100
 # define FD_OUT 101
+# define MALLOC 102
+# define NO_PATH 103
 
 typedef struct s_cmd
 {
@@ -58,10 +60,10 @@ void	exit_if_not_5_args(int ac);
 void	exit_if_failed_fd_open(t_cmd *s_cmd, int id);
 void	exit_if_failed_dup(t_cmd *s_cmd);
 void	exit_if_failed_fork(t_cmd *s_cmd, int child);
-void	error_no_path(t_cmd *s_cmd, char *av, char **path, char **cmd, int i);
+void	path_error(t_cmd *s_cmd, char *av, char **path, char **cmd, int id);
 
 //					FREE
-void	free_double_tab(char **tab);
+void	free_pp_arr(char **tab);
 void	free_struct(t_cmd *s_cmd);
 
 #endif

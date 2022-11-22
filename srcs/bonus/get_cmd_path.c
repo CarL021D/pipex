@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/20 01:01:38 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 01:17:23 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,16 @@ char	*get_command_path(t_cmd *s_cmd, char *av)
 		command_path = join_slash_and_comd_to_path(segmented_path[i], cmd[0]);
 		if (!command_path)
 			break;
-		if (access(command_path, F_OK | X_OK) == 0)
-			return (free_double_tab(segmented_path),
-				free_double_tab(cmd), command_path);
+		if (access(command_path, F_OK | X_OK) == 0 && !(cmd[0][0] == '/'))
+			return (free_pp_arr(segmented_path),
+				free_pp_arr(cmd), command_path);
 		free(command_path);
 		i++;
 	}
 	error_no_path(s_cmd, av, segmented_path, cmd, i);
 	exit(EXIT_FAILURE);
-	// free_double_tab(segmented_path);
-	// free_double_tab(cmd);
+	// free_pp_arr(segmented_path);
+	// free_pp_arr(cmd);
 	// free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
 	// free(s_cmd->pid_arr);
 	// if (!segmented_path[i])

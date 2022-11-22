@@ -129,7 +129,6 @@ void	set_here_doc(t_cmd *s_cmd, char **av)
 	char	*line;
 	char	*delimeter;
 
-
 	if (pipe(s_cmd->pipe_here_doc) == -1)
 	{
 		exit_error(PIPE, s_cmd);

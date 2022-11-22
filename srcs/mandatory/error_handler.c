@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/20 01:11:41 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 01:14:33 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,20 @@ void	exit_if_failed_fork(t_cmd *s_cmd, int child)
 	}
 }
 
-void	error_no_path(t_cmd *s_cmd, char *av, char **path, char **cmd, int i)
+void	path_error(t_cmd *s_cmd, char *av, char **path, char **cmd, int id)
 {
-	free_double_tab(path);
-	free_double_tab(cmd);
+	free_pp_arr(path);
+	free_pp_arr(cmd);
 	close(s_cmd->fd_in);
-	close(s_cmd->fd_out);
-	if (!path[i])
+	// close(s_cmd->fd_out);	
+	
+	if (NO_PATH == id)
 	{
 		write(2, "zsh: command not found: ", 24);
 		write(2, av, ft_strlen(av));
 		write(2, "\n", 1);
 	}
-	else
+	if (MALLOC == id)
 		perror("Malloc");
+	// exit(EXIT_FAILURE);
 }
