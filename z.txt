@@ -1,14 +1,1 @@
-aaa 44
-44
-""""""
-2ww
-zzzz
-ahahahe
-dddd
-dddd
-e
-      1       1       6
-wwww
-e
-ssss
-e
+      3       5      18
