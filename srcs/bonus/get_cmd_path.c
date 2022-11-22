@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 01:17:23 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 12:01:20 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,40 +80,59 @@ static char	*cmd_env_path_line(t_cmd *s_cmd)
 
 char	*get_command_path(t_cmd *s_cmd, char *av)
 {
-	char	**segmented_path;
-	char	*command_path;
-	char	*path_env;
+	char	**split_path;
 	char	**cmd;
+	char	*cmd_path;
+	char	*path_env;
 	int		i;
 
 	path_env = cmd_env_path_line(s_cmd);
-	segmented_path = ft_split(path_env, ':');
+	split_path = ft_split(path_env, ':');
 	free(path_env);
 	cmd = ft_split(av, ' ');
-	// if (segmented_path == NULL || cmd == NULL)
+	
+	// 	i = 0;
+	// while (split_path[i])
 	// {
-	// 	perror("Malloc");
-	// 	exit(EXIT_FAILURE);
+	// 	cmd_path = join_slash_and_comd_to_path(split_path[i], cmd[0]);
+	// 	if (!cmd_path)
+	// 		break;
+	// 	if (access(cmd_path, F_OK | X_OK) == 0 && !(cmd[0][0] == '/'))
+	// 		return (free_pp_arr(split_path),
+	// 			free_pp_arr(cmd), cmd_path);
+	// 	free(cmd_path);
+	// 	i++;
 	// }
-	i = 0;
-	while (segmented_path[i])
+	// path_error(s_cmd, av, split_path, cmd, i);
+	// exit(EXIT_FAILURE);
+	
+	
+	i = -1;
+	while (split_path[++i])
 	{
-		command_path = join_slash_and_comd_to_path(segmented_path[i], cmd[0]);
-		if (!command_path)
+		cmd_path = join_slash_and_comd_to_path(split_path[i], cmd[0]);
+
+		if (!cmd_path)
+		{
+			path_error(s_cmd, av, split_path, cmd, MALLOC);
 			break;
-		if (access(command_path, F_OK | X_OK) == 0 && !(cmd[0][0] == '/'))
-			return (free_pp_arr(segmented_path),
-				free_pp_arr(cmd), command_path);
-		free(command_path);
-		i++;
+		}
+		if (access(cmd_path, F_OK | X_OK) == 0 && !(cmd[0][0] == '/'))
+			return (free_pp_arr(split_path),
+				free_pp_arr(cmd),write(2, s_cmd->cmd_path, ft_strlen(s_cmd->cmd_path)), write(2, "\n\n", 2), cmd_path);
+		free(cmd_path);
 	}
-	error_no_path(s_cmd, av, segmented_path, cmd, i);
+	path_error(s_cmd, av, split_path, cmd, i);
 	exit(EXIT_FAILURE);
-	// free_pp_arr(segmented_path);
+
+
+
+	
+	// free_pp_arr(split_path);
 	// free_pp_arr(cmd);
 	// free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
 	// free(s_cmd->pid_arr);
-	// if (!segmented_path[i])
+	// if (!split_path[i])
 	// {
 	// 	write(2, "zsh: command not found: ", 24);
 	// 	write(2, av, ft_strlen(av));

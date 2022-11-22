@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 01:00:23 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 10:14:55 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@
 # define FD_IN 100
 # define FD_OUT 101
 # define MALLOC 102
-# define NO_PATH 103
+# define PATH_ERROR 103
 
 typedef struct s_cmd
 {
 	pid_t	pid_1;
 	pid_t	pid_2;
+	int		pipe_[2];
 	int		fd_in;
 	int		fd_out;
 	char	*cmd_path;
@@ -45,7 +46,7 @@ char	*get_command_path(t_cmd *s_cmd, char *av, char **envp);
 
 //					INIT
 void	init_cmd_struct(t_cmd *s_cmd);
-void	init_fd_in_or_out(int id, t_cmd *s_cmd, char **av);
+void	init_fd(int id, t_cmd *s_cmd, char **av);
 
 //					UTILS
 size_t	ft_strlen(char *str);

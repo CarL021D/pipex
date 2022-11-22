@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 01:00:23 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/21 11:41:20 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@
 
 # define FD_IN 0
 # define FD_OUT 1
+# define BUFFER_SIZE 10
 # define MALLOC 100
 # define FORK 101
 # define DUP2 102
 # define EXECVE 103
 # define OPEN 104
 # define PIPE 105
-# define BUFFER_SIZE 10
+# define PATH_ERROR 105
 
 typedef struct s_cmd
 {
@@ -52,19 +53,32 @@ typedef struct s_cmd
 //                  PIPEX
 char	*get_command_path(t_cmd *s_cmd, char *av);
 void	exit_if_not_enough_args(int ac, char **av);
-void	fd_in_init(t_cmd *s_cmd, char **av);
+void	init_fd(int id, t_cmd *s_cmd, char **av, int ac);
+// void	fd_in_init(t_cmd *s_cmd, char **av);
 void	fd_out_init(t_cmd *s_cmd, int ac, char **av);
-void	close_fds(t_cmd *s_cmd, int fd);
+// void	close_fds(t_cmd *s_cmd, int fd);
+void	close_fds(t_cmd *s_cmd);
 void	close_here_doc_fd(t_cmd *s_cmd);
 void	pipe_arr_init(t_cmd *s_cmd);
 void	cmd_struct_init(t_cmd *s_cmd, int ac, char **av, char **envp);
 void	set_here_doc(t_cmd *s_cmd, char **av);
 
 //					PROCESS EXEC
-void	fd_to_pipe_exec(t_cmd *s_cmd, char **av);
-void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av);
+
+// void	fd_to_pipe_exec(t_cmd *s_cmd, char **av);
+void	fd_to_pipe_exec(t_cmd *s_cmd);
+// void	here_doc_to_pipe_exec(t_cmd *s_cmd, char **av);
+void	here_doc_to_pipe_exec(t_cmd *s_cmd);
 void	pipe_to_pipe_exec(t_cmd *s_cmd);
-void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac);
+
+
+
+
+
+void	pipe_to_fd_exec(t_cmd *s_cmd);
+// void	pipe_to_fd_exec(t_cmd *s_cmd, char **av, int ac);
+
+
 
 //                  UTILS
 size_t	ft_strlen(char *str);
@@ -77,7 +91,7 @@ int		ft_strcmp(char *s1, char *s2);
 //                  ERROR
 void	check_env(char **envp);
 void	exit_error(int id, t_cmd *s_cmd);
-void	error_no_path(t_cmd *s_cmd, char *av, char **path, char **cmd, int i);
+void	path_error(t_cmd *s_cmd, char *av, char **path, char **cmd, int id);
 // void	exit_if_failed_dup(void);
 // void	exit_if_failed_fork(t_cmd *s_cmd);
 
