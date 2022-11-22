@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:47:31 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 11:08:52 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 11:11:57 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,10 @@ void	pipe_to_pipe_exec(t_cmd *s_cmd)
 			exit_error(DUP2, s_cmd);
 			// exit_if_failed_dup();
 		
-		// if (s_cmd->here_doc)
-		// 	close_here_doc_fd(s_cmd);
-		// else
-		// 	close(s_cmd->fd_in);
+		if (s_cmd->here_doc)
+			close_here_doc_fd(s_cmd);
+		else
+			close(s_cmd->fd_in);
 		// if (s_cmd->here_doc)
 		// 	close(s_cmd->fd_in);
 		close_fds(s_cmd);
