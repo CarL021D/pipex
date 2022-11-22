@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 23:05:14 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/21 01:00:23 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 23:26:18 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,12 @@ void	free_pipe_arr(t_cmd *s_cmd, int i)
 		i--;
 	}
 	free(s_cmd->pipe_arr);
-	// exit(EXIT_FAILURE);
 }
 
 void	free_struct(t_cmd *s_cmd)
 {
-		free(s_cmd->pid_arr);
-		free_pipe_arr(s_cmd, (s_cmd->nb_cmd - 1));
+	free(s_cmd->pid_arr);
+	free_pipe_arr(s_cmd, (s_cmd->nb_cmd - 1));
 }
 
 void	free_pipe_and_pid_arr(int id, t_cmd *s_cmd, int count)
@@ -47,4 +46,12 @@ void	free_pipe_and_pid_arr(int id, t_cmd *s_cmd, int count)
 	free(s_cmd->pid_arr);
 	free_pipe_arr(s_cmd, count);
 	exit_error(id, s_cmd);
+}
+
+void	free_execve_params(t_cmd *s_cmd)
+{
+	if (s_cmd->cmd_path != NULL)
+		free(s_cmd->cmd_path);
+	if (s_cmd->cmd_options != NULL)
+		free_pp_arr(s_cmd->cmd_options);
 }

@@ -6,7 +6,7 @@
 #    By: caboudar <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/24 15:12:48 by caboudar          #+#    #+#              #
-#    Updated: 2022/11/13 23:43:41 by caboudar         ###   ########.fr        #
+#    Updated: 2022/11/22 23:25:30 by caboudar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,13 +22,13 @@ SRCS	= 		srcs/mandatory/pipex.c 					\
 				
 SRCS_B =		srcs/bonus/pipex.c					\
 				srcs/bonus/process_exec.c			\
+				srcs/bonus/close_fd.c				\
 				srcs/bonus/ft_split.c				\
 				srcs/bonus/get_cmd_path.c			\
 				srcs/bonus/utils.c					\
 				srcs/bonus/ft_free.c				\
 				srcs/bonus/error_handler.c			\
 				srcs/bonus/get_next_line.c			\
-				srcs/bonus/get_next_line_utils.c	\
 				srcs/bonus/init.c					\
 
 OBJS	= ${SRCS:.c=.o}

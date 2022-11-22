@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free.c                                          :+:      :+:    :+:   */
+/*   close_fd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/12 23:05:14 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 23:11:30 by caboudar         ###   ########.fr       */
+/*   Created: 2022/11/22 23:24:25 by caboudar          #+#    #+#             */
+/*   Updated: 2022/11/22 23:25:02 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../../includes/pipex_bonus.h"
 
-void	free_pp_arr(char **tab)
+void	close_here_doc_fd(t_cmd *s_cmd)
+{
+	close(s_cmd->pipe_here_doc[0]);
+	close(s_cmd->pipe_here_doc[1]);
+}
+
+void	close_fds(t_cmd *s_cmd)
 {
 	int		i;
 
 	i = 0;
-	while (tab[i])
+	while (i < (s_cmd->nb_cmd - 1))
 	{
-		free(tab[i]);
+		close(s_cmd->pipe_arr[i][0]);
+		close(s_cmd->pipe_arr[i][1]);
 		i++;
 	}
-	free(tab);
-}
-
-void	free_execve_params(t_cmd *s_cmd)
-{
-	if (s_cmd->cmd_path != NULL)
-		free(s_cmd->cmd_path);
-	if (s_cmd->cmd_options != NULL)
-		free_pp_arr(s_cmd->cmd_options);
 }

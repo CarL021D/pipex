@@ -6,13 +6,11 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 13:01:46 by caboudar          #+#    #+#             */
-/*   Updated: 2022/10/20 16:08:26 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 23:01:09 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/pipex_bonus.h"
-
-// ntchg
 
 static void	free_split_tab(char **arr, int i)
 {

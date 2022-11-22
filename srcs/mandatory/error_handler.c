@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:17:41 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 20:08:21 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 23:49:11 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,9 @@ void	exit_if_not_5_args(int ac)
 
 void	exit_if_failed_fd_open(t_cmd *s_cmd, int id)
 {
-		if (FD_IN == id && s_cmd->fd_in == -1)
+	if (FD_IN == id && s_cmd->fd_in == -1)
 	{
 		perror("Open");
-		
 		exit(EXIT_FAILURE);
 	}
 	if (FD_OUT == id && s_cmd->fd_out == -1)
@@ -42,7 +41,7 @@ void	exit_if_failed_dup(t_cmd *s_cmd)
 		close(s_cmd->fd_in);
 	if (s_cmd->fd_out)
 		close(s_cmd->fd_out);
-	perror("Dup2");	
+	perror("Dup2");
 	exit(EXIT_FAILURE);
 }
 
@@ -60,13 +59,10 @@ void	exit_if_failed_fork(t_cmd *s_cmd, int child)
 	}
 }
 
-void	path_error(t_cmd *s_cmd, char *av, char **path, char **cmd, int id)
+void	path_error(t_cmd *s_cmd, char *av, char **cmd, int id)
 {
-	free_pp_arr(path);
 	free_pp_arr(cmd);
 	close(s_cmd->fd_in);
-	// if (s_cmd->fd_out)
-	// close(s_cmd->fd_out);
 	close(s_cmd->pipe_[0]);
 	close(s_cmd->pipe_[1]);
 	if (PATH_ERROR == id)
@@ -77,5 +73,4 @@ void	path_error(t_cmd *s_cmd, char *av, char **path, char **cmd, int id)
 	}
 	if (MALLOC == id)
 		perror("Malloc");
-	// exit(EXIT_FAILURE);
 }

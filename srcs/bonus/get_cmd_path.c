@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 22:19:30 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 21:02:21 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/22 23:45:57 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ char	*path_str(char *full_path)
 	{
 		perror("Malloc");
 		exit(EXIT_FAILURE);
-		// exit_error(MALLOC, s_cmd);
 	}
 	i = 0;
 	while (full_path[i])
@@ -75,15 +74,12 @@ static char	*cmd_env_path_line(t_cmd *s_cmd)
 		i++;
 	}
 	return (NULL);
-
-	// perror("No env");
-	// exit(EXIT_FAILURE);
 }
 
 char	*get_cmd_if_no_env(char **cmd)
 {
 	if (access(cmd[0], F_OK | X_OK) == 0)
-		return(cmd[0]);
+		return (cmd[0]);
 	return (perror("Access error"), NULL);
 }
 
@@ -92,7 +88,7 @@ char	*get_cmd_if_env(t_cmd *s_cmd, char *av, char *path_env, char **cmd)
 	char	**split_path;
 	char	*cmd_path;
 	int		i;
-	
+
 	split_path = ft_split(path_env, ':');
 	free(path_env);
 	i = -1;
@@ -101,25 +97,25 @@ char	*get_cmd_if_env(t_cmd *s_cmd, char *av, char *path_env, char **cmd)
 		cmd_path = join_slash_and_comd_to_path(split_path[i], cmd[0]);
 		if (!cmd_path)
 		{
-			path_error(s_cmd, av, split_path, cmd, MALLOC);
-			break;
+			free_pp_arr(split_path);
+			path_error(s_cmd, av, cmd, MALLOC);
+			break ;
 		}
 		if (access(cmd_path, F_OK | X_OK) == 0 && !(cmd[0][0] == '/'))
 			return (free_pp_arr(split_path),
 				free_pp_arr(cmd), cmd_path);
 		free(cmd_path);
 	}
-	path_error(s_cmd, av, split_path, cmd, PATH_ERROR);
+	free_pp_arr(split_path);
+	path_error(s_cmd, av, cmd, PATH_ERROR);
 	return (NULL);
 }
-
 
 char	*get_cmd_path(t_cmd *s_cmd, char *av)
 {
 	char	**cmd;
 	char	*cmd_path;
 	char	*path_env;
-	// int		i;
 
 	cmd = ft_split(av, ' ');
 	if (!cmd)
@@ -135,96 +131,6 @@ char	*get_cmd_path(t_cmd *s_cmd, char *av)
 		cmd_path = get_cmd_if_env(s_cmd, av, path_env, cmd);
 		if (!cmd_path)
 			exit(EXIT_FAILURE);
-			// path_error(s_cmd, av, split_path, cmd, PATH_ERROR);
 		return (cmd_path);
 	}
-		// split_path = ft_split(path_env, ':');
-		// free(path_env);
-		// i = -1;
-		// while (split_path[++i])
-		// {
-		// 	cmd_path = join_slash_and_comd_to_path(split_path[i], cmd[0]);
-		// 	if (!cmd_path)
-		// 	{
-		// 		path_error(s_cmd, av, split_path, cmd, MALLOC);
-		// 		break;
-		// 	}
-		// 	if (access(cmd_path, F_OK | X_OK) == 0 && !(cmd[0][0] == '/'))
-		// 		return (free_pp_arr(split_path),
-		// 			free_pp_arr(cmd), cmd_path);
-		// 	free(cmd_path);
-		// }
-	// path_error(s_cmd, av, split_path, cmd, PATH_ERROR);
-	// exit(EXIT_FAILURE);
-
-
-
-
-
-
-
-
-
-
-	// cmd = ft_split(av, ' ');
-	// path_env = cmd_env_path_line(s_cmd);
-	// if (!path_env)
-	// {
-	// 	if (access(cmd[0], F_OK | X_OK) == 0)
-	// 		return(cmd[0]);
-	// 	return (perror("Access error"), NULL);
-	// }
-	// split_path = ft_split(path_env, ':');
-	// free(path_env);
-	// i = -1;
-	// while (split_path[++i])
-	// {
-	// 	cmd_path = join_slash_and_comd_to_path(split_path[i], cmd[0]);
-	// 	if (!cmd_path)
-	// 	{
-	// 		path_error(s_cmd, av, split_path, cmd, MALLOC);
-	// 		break;
-	// 	}
-	// 	if (access(cmd_path, F_OK | X_OK) == 0 && !(cmd[0][0] == '/'))
-	// 		return (free_pp_arr(split_path),
-	// 			free_pp_arr(cmd), cmd_path);
-	// 	free(cmd_path);
-	// }
-	// path_error(s_cmd, av, split_path, cmd, PATH_ERROR);
-	// exit(EXIT_FAILURE);
-
-
-
-
-	
-	// 	i = 0;
-	// while (split_path[i])
-	// {
-	// 	cmd_path = join_slash_and_comd_to_path(split_path[i], cmd[0]);
-	// 	if (!cmd_path)
-	// 		break;
-	// 	if (access(cmd_path, F_OK | X_OK) == 0 && !(cmd[0][0] == '/'))
-	// 		return (free_pp_arr(split_path),
-	// 			free_pp_arr(cmd), cmd_path);
-	// 	free(cmd_path);
-	// 	i++;
-	// }
-	// path_error(s_cmd, av, split_path, cmd, i);
-	// exit(EXIT_FAILURE);
-
-
-
-	
-	// free_pp_arr(split_path);
-	// free_pp_arr(cmd);
-	// free_pipe_arr(s_cmd, s_cmd->nb_cmd - 1);
-	// free(s_cmd->pid_arr);
-	// if (!split_path[i])
-	// {
-	// 	write(2, "zsh: command not found: ", 24);
-	// 	write(2, av, ft_strlen(av));
-	// 	write(2, "\n", 1);
-	// }
-	// else
-	// 	perror("Malloc");
 }
