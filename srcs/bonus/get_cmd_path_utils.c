@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_cmd_path_utils.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/23 14:20:14 by caboudar          #+#    #+#             */
+/*   Updated: 2022/11/23 14:21:02 by caboudar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex_bonus.h"
 
-char *join_slash_and_comd_to_path(char *s1, char *s2)
+char	*join_slash_and_comd_to_path(char *s1, char *s2)
 {
-	char        *str;
-	size_t      l_s1;
-	size_t      l_s2;
-	size_t      i;
-	size_t      j;
+	char		*str;
+	size_t		l_s1;
+	size_t		l_s2;
+	size_t		i;
+	size_t		j;
 
 	if (!s1 || !s2)
 		return (NULL);
@@ -47,4 +59,3 @@ char	*path_str(char *full_path)
 	path[i] = '\0';
 	return (path);
 }
-
