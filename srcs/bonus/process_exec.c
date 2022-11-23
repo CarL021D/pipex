@@ -6,11 +6,11 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 23:47:31 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 23:24:55 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/23 13:14:19 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/pipex_bonus.h"
+#include "pipex_bonus.h"
 
 void	fd_to_pipe_exec(t_cmd *s_cmd)
 {

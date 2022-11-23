@@ -1,73 +1,67 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: caboudar <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/10/24 15:12:48 by caboudar          #+#    #+#              #
-#    Updated: 2022/11/22 23:25:30 by caboudar         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+SRCDIR        =     srcs/mandatory/
+SRC           =		pipex.c                 \
+                	init.c                  \
+                	ft_split.c              \
+                	get_cmd_path.c          \
+                	path_parsing_utils.c    \
+                	ft_free.c               \
+                	error_handler.c         \
 
-NAME = pipex
 
-SRCS	= 		srcs/mandatory/pipex.c 					\
-				srcs/mandatory/init.c					\
-				srcs/mandatory/ft_split.c				\
-				srcs/mandatory/get_cmd_path.c			\
-				srcs/mandatory/path_parsing_utils.c		\
-				srcs/mandatory/ft_free.c				\
-				srcs/mandatory/error_handler.c			\
-				
-SRCS_B =		srcs/bonus/pipex.c					\
-				srcs/bonus/process_exec.c			\
-				srcs/bonus/close_fd.c				\
-				srcs/bonus/ft_split.c				\
-				srcs/bonus/get_cmd_path.c			\
-				srcs/bonus/utils.c					\
-				srcs/bonus/ft_free.c				\
-				srcs/bonus/error_handler.c			\
-				srcs/bonus/get_next_line.c			\
-				srcs/bonus/init.c					\
+B_SRCDIR    =		srcs/bonus/
+B_SRC		=		pipex.c					\
+                	process_exec.c			\
+ 					close_fd.c				\
+ 					ft_split.c				\
+ 					get_cmd_path.c			\
+ 					get_cmd_path_utils.c	\
+ 					utils.c					\
+					ft_free.c				\
+					ft_free_2.c				\
+					error_handler.c			\
+					get_next_line.c			\
+					init.c					\
 
-OBJS	= ${SRCS:.c=.o}
 
-OBJS_B	= ${SRCS_B:.c=.o}
+OBJDIR        =     obj/
+OBJ            =     $(addprefix $(OBJDIR), $(SRC:.c=.o))
 
-CFLAGS	= -Wall -Werror -Wextra -g
+B_OBJDIR	=		$(OBJDIR)/bonus
+B_OBJ		=		$(addprefix $(B_OBJDIR), $(B_SRC:.c=.o))
 
-CC		= gcc
+NAME		=		pipex
+B_NAME		=		pipex_bonus
 
-RM		= rm -f
+CC			=		cc
+RM			=		rm -f
+CFLAGS		=		-Wall -Wextra -Werror -g
 
-INCS    = includes
+$(OBJDIR)%.o:		$(SRCDIR)%.c
+					@mkdir -p $(OBJDIR)
+					$(CC) -I ./includes $(CFLAGS) -c $< -o $@
 
-all:	${NAME}
+$(B_OBJDIR)%.o:		$(B_SRCDIR)%.c
+					@mkdir -p $(B_OBJDIR)
+					$(CC) -I ./includes $(CFLAGS) -c $< -o $@
 
-.c.o:
-		@$(CC) ${CFLAGS} -I$(INCS) -c $< -o $@
+$(NAME):			$(OBJ)
+						@$(CC) -g $^ -o $@
 
-${NAME}:	${OBJS}
-		@${CC} ${CFLAGS} ${OBJS} -o pipex
-		@printf "%s\e[0;32m pipex : Compiling object file into executable\n\e[0m" "-"
+$(B_NAME):			$(B_OBJ)
+						@$(CC) -g $^ -o $@
 
-bonus: ${OBJS_B}
-		${CC} ${CFLAGS} ${OBJS_B} -I$(INCS) -o pipex
-		@printf "%s\e[0;32m pipex : Compiling bonus object file into executable\n\e[0m" "-"
+all:				$(NAME) $(B_NAME)
+
+bonus:				$(B_NAME)
 
 clean:
-		@${RM} ${OBJS}
-		@${RM} ${OBJS_B}
-		@printf "%s\e[0;31m pipex : Delete all object files\n\e[0m" "-"
+					$(RM) -r $(OBJDIR)
+#					$(RM) -r $(B_OBJDIR)
 
-fclean:
-		@${RM} ${OBJS}
-		@${RM} ${OBJS_B}
-		@printf "%s\e[0;31m pipex : Delete all object files\n\e[0m" "-"
-		@${RM} ${NAME}
-		@printf "%s\e[0;31m pipex : Delete executable\n\e[0m" "-"
+fclean:				clean
+					$(RM) $(NAME)
+					$(RM) $(B_NAME)
 
-re: fclean ${NAME}
+re:					fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY:				all bonus clean fclean re

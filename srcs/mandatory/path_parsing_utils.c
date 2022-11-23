@@ -6,11 +6,11 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 01:34:04 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 23:22:52 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/23 13:15:37 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "pipex.h"
 
 size_t	ft_strlen(char *str)
 {

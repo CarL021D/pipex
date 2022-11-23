@@ -6,18 +6,11 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 08:03:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 23:12:27 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/23 13:16:28 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <sys/errno.h>
+#include "pipex.h"
 
 static void	child_1_exec(t_cmd *s_cmd, char **envp)
 {

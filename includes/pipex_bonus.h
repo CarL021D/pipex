@@ -6,7 +6,7 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 07:58:48 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/22 23:43:28 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/23 14:04:05 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,13 @@ void	pipe_to_fd_exec(t_cmd *s_cmd);
 
 //					UTILS
 size_t	ft_strlen(char *str);
+int		ft_strcmp(char *s1, char *s2);
 char	**ft_split(char *str, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*path_str(char *full_path);
 char	*ft_strnstr(char *full_path, const char *s2, size_t n);
-int		ft_strcmp(char *s1, char *s2);
+char	*join_slash_and_comd_to_path(char *s1, char *s2);
+char	*path_str(char *full_path);
 
 //					ERROR
 void	check_env(char **envp);
@@ -86,6 +88,7 @@ void	free_struct(t_cmd *s_cmd);
 void	free_pipe_arr(t_cmd *s_cmd, int i);
 void	free_pipe_and_pid_arr(int id, t_cmd *s_cmd, int count);
 void	free_execve_params(t_cmd *s_cmd);
+void	gnl_cleaner(char *stash, char *line);
 
 //					GET NEXT LINE
 char	*get_next_line(int fd, int id);

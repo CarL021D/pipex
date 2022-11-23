@@ -6,11 +6,11 @@
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 00:10:11 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/23 00:01:33 by caboudar         ###   ########.fr       */
+/*   Updated: 2022/11/23 13:13:48 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/pipex_bonus.h"
+#include "pipex_bonus.h"
 
 char	*join_stash_to_buffer(char *s1, char *s2)
 {
@@ -95,12 +95,6 @@ char	*ft_set_stash(char *stash)
 	}
 	else
 		return (free(stash), NULL);
-}
-
-static void	gnl_cleaner(char *stash, char *line)
-{
-	free(stash);
-	free(line);
 }
 
 char	*get_next_line(int fd, int id)

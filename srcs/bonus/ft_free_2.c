@@ -1,38 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free.c                                          :+:      :+:    :+:   */
+/*   ft_free_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caboudar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/12 23:05:14 by caboudar          #+#    #+#             */
-/*   Updated: 2022/11/23 13:13:21 by caboudar         ###   ########.fr       */
+/*   Created: 2022/11/23 12:10:14 by caboudar          #+#    #+#             */
+/*   Updated: 2022/11/23 13:48:54 by caboudar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	free_pipe_arr(t_cmd *s_cmd, int i)
+void	free_pp_arr(char **tab)
 {
-	while (i)
+	int		i;
+
+	i = 0;
+	while (tab[i])
 	{
-		free(s_cmd->pipe_arr[i - 1]);
-		i--;
+		free(tab[i]);
+		i++;
 	}
-	free(s_cmd->pipe_arr);
+	free(tab);
 }
 
-void	free_pipe_and_pid_arr(int id, t_cmd *s_cmd, int count)
+void	free_struct(t_cmd *s_cmd)
 {
 	free(s_cmd->pid_arr);
-	free_pipe_arr(s_cmd, count);
-	exit_error(id, s_cmd);
+	free_pipe_arr(s_cmd, (s_cmd->nb_cmd - 1));
 }
 
-void	free_execve_params(t_cmd *s_cmd)
+void	gnl_cleaner(char *stash, char *line)
 {
-	if (s_cmd->cmd_path != NULL)
-		free(s_cmd->cmd_path);
-	if (s_cmd->cmd_options != NULL)
-		free_pp_arr(s_cmd->cmd_options);
+	free(stash);
+	free(line);
 }
