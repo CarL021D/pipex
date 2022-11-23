@@ -56,7 +56,6 @@ bonus:				$(B_NAME)
 
 clean:
 					$(RM) -r $(OBJDIR)
-#					$(RM) -r $(B_OBJDIR)
 
 fclean:				clean
 					$(RM) $(NAME)
